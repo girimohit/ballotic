@@ -6,7 +6,7 @@ export default async function LoginVoter() {
     const session = await getServerSession();
     if (session) {
         console.log("Login secssion redirected");
-        redirect('/auth/register')
+        redirect('/')
     }
     return (
         <>

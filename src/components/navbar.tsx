@@ -1,11 +1,18 @@
 import { ModeToggle } from "./ModeToggleBtn"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
-import { LogOut } from "lucide-react";
 import Logout from "@/app/logout";
+import { getSession, useSession } from "next-auth/react";
+import { userAgent } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 const Navbar = async () => {
     const session = await getServerSession();
+    // const session = await getSession();
+    // const { data: sessions, status } = useSession();
+    console.log("SEssions : ")
+    console.log(session?.user)
+
     return (
         <>
             {/* <div>navbar</div>
@@ -16,9 +23,14 @@ const Navbar = async () => {
                     <Link href={"/elections"}>Elections</Link>
                     {/* <Link href={"/candidates"}>Candidates</Link> */}
                     {/* <Link href={"/results"}>Results</Link> */}
-                    <Link href={"/auth"} className=" border-[0.03px] border-[#4c4c4c] px-3 p-1 rounded-3xl">Register/Login</Link>
-                    {!!session && <Logout />}
-                    {!session && <Link href={"/auth/login"}>Login</Link>}
+                    <span className=" border-[0.03px] border-[#4c4c4c] px-4 p-1 rounded-3xl">
+                        {!!session &&
+                            <span>
+                                <Logout />
+                            </span>
+                        }
+                        {!session && <Link href={"/auth/login"}>Login</Link>}
+                    </span>
                     <ModeToggle />
                 </div>
             </div>

@@ -10,7 +10,7 @@ export async function query({ query, values = [] }: QueryOptions): Promise<any> 
     host: "localhost",
     user: "root",
     password: "root",
-    database: "nextjs",
+    database: "ballotic",
   });
 
   try {

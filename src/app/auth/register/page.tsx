@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 const RegisterVoter = async () => {
     const session = await getServerSession();
+    // While logged in, if we try to access the 'auth/register' pages, it will redirect to '/'
     if (session) {
         redirect('/');
     }

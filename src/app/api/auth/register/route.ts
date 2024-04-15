@@ -3,13 +3,14 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { name, age } = await request.json();
-    console.log({ name, age });
+    const { name, password, email, role, ward_num } = await request.json();
+    console.log({ name, password, email, role, ward_num });
     // console.log(`INSERT INTO voter (name, age) VALUES (${name}, ${age})`);
     const response = await query({
-      query: `INSERT INTO voter (name, age) VALUES ('${name}', ${age})`,
+      query: `INSERT INTO voter (username, password, email, role, ward_number) VALUES ('${name}', '${password}', '${email}', '${role}', ${ward_num})`,
       // values: [name, age],
     });
+    return NextResponse.redirect("http://localhost:3000/auth/login");
   } catch (error) {
     console.log(error);
   }

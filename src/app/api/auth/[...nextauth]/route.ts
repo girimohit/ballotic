@@ -1,12 +1,16 @@
-import NextAuth from "next-auth";
+import NextAuth, { Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { query } from "@/database/db";
 import bcrypt, { compare, compareSync } from "bcrypt";
+import { JWT } from "next-auth/jwt";
+import jwt from "jsonwebtoken";
+import bcryptjs from "bcryptjs";
 
 const handler = NextAuth({
   session: {
     strategy: "jwt", // Use database-backed sessions
-    maxAge: 30 * 24 * 60 * 60,
+    // maxAge: 30 * 24 * 60 * 60,
+    maxAge: 2 * 24 * 60 * 60,
   },
 
   pages: {
@@ -18,31 +22,24 @@ const handler = NextAuth({
       name: "Credentials",
       credentials: {
         name: {},
-        age: { type: "text" },
+        password: {},
       },
       async authorize(credentials, req) {
         console.log({ credentials });
+        console.log("Wrong password or username");
+        // alert("Wrong password or username");
         // console.log(`SELECT * FROM voter WHERE name="${credentials?.name}" AND age=${credentials?.age}`);
         const response = await query({
-          query: `SELECT * FROM voter WHERE name="${credentials?.name}" AND age=${credentials?.age}`,
-          // values: [],
+          query: `SELECT * FROM voter WHERE username="${credentials?.name}"`,
+          values: [],
         });
         const user = response[0];
+        console.log("User Object : ");
         console.log(user);
         console.log(user.id);
+        const providedAge = credentials?.password?.toString().trim() || "";
+        const userAge = user.password.toString().trim();
 
-        // console.log(user.name.type());
-        // console.log(user.name);
-        // console.log(user.age.toString());
-        // console.log(credentials?.age.toString());
-
-        const providedAge = credentials?.age?.toString().trim() || "";
-        const userAge = user.age.toString().trim();
-
-        console.log("Provided Age:", providedAge);
-        console.log("User Age:", userAge);
-        console.log("Type of Provided Age:", typeof providedAge);
-        console.log("Type of User Age:", typeof userAge);
         // const ageCorrect = await compare(providedAge, userAge);
         const ageCorrect = providedAge === userAge;
         // const ageCorrect = compareSync(providedAge, userAge);
@@ -52,15 +49,45 @@ const handler = NextAuth({
         if (ageCorrect) {
           return {
             id: user.id,
-            name: user.name,
-            age: user.age,
+            name: user.username,
+            email: user.email,
           };
         }
         console.log("NUlll returned");
+
         return null;
       },
     }),
   ],
+
+  callbacks: {
+    async jwt({ token, user, account, profile, isNewUser }): Promise<JWT> {
+      console.log(user);
+      token.guy = "abc";
+      if (user?.name) {
+        token.name = user.name;
+        token.age = user.name;
+      }
+      if (user?.email) {
+        token.age = user.email;
+      }
+      // console.log("USER");
+      // console.log(user);
+      // console.log("PRINTING TOKEN");
+      // console.log(token);
+      return token;
+    },
+    async session({ session, user, token }): Promise<Session> {
+      // async session(session: Session, token: JWT) {
+        
+        console.log(user);
+      // session.user = token; // Assuming `user` is the key to store user data in the session
+      session.user = user;
+      // console.log("PRINTING SESSION ");
+      // console.log(session);
+      return session;
+    },
+  },
 });
 
 export { handler as GET, handler as POST };

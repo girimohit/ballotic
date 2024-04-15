@@ -1,0 +1,139 @@
+Sure, here's the revised schema without any image or logo fields:
+
+1. **Users Table**:
+   - user_id (Primary Key)
+   - username
+   - password
+   - email
+   - role (admin, voter, etc.)
+
+2. **Parties Table**:
+   - party_id (Primary Key)
+   - party_name
+   - party_leader
+
+3. **Candidates Table**:
+   - candidate_id (Primary Key)
+   - name
+   - party_id (Foreign Key referencing Parties Table)
+   - election_id (Foreign Key referencing the Elections Table)
+
+4. **Elections Table**:
+   - election_id (Primary Key)
+   - election_name
+   - start_date
+   - end_date
+   - ward_number (Nullable, references Wards Table)
+   - district_id (Foreign Key referencing Districts Table)
+
+5. **Districts Table**:
+   - district_id (Primary Key)
+   - district_name
+
+6. **Wards Table**:
+   - ward_number (Primary Key)
+   - ward_name
+   - district_id (Foreign Key referencing Districts Table)
+
+7. **Voters Table**:
+   - voter_id (Primary Key)
+   - user_id (Foreign Key referencing Users Table)
+   - election_id (Foreign Key referencing Elections Table)
+   - ward_number (Foreign Key referencing Wards Table)
+
+8. **Votes Table**:
+   - vote_id (Primary Key)
+   - voter_id (Foreign Key referencing Voters Table)
+   - candidate_id (Foreign Key referencing Candidates Table)
+   - timestamp
+
+9. **Election_Results Table**:
+   - result_id (Primary Key)
+   - election_id (Foreign Key referencing Elections Table)
+   - candidate_id (Foreign Key referencing Candidates Table)
+   - total_votes
+   - percentage_votes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE DATABASE ballotic;
+
+USE ballotic;
+
+CREATE TABLE Voters (
+    voter_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'voter') NOT NULL,
+    ward_number INT,
+    FOREIGN KEY (ward_number) REFERENCES Wards(ward_number)
+);
+
+CREATE TABLE Parties (
+    party_id INT AUTO_INCREMENT PRIMARY KEY,
+    party_name VARCHAR(255) NOT NULL,
+    party_leader VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Candidates (
+    candidate_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    party_id INT,
+    election_id INT,
+    FOREIGN KEY (party_id) REFERENCES Parties(party_id),
+    FOREIGN KEY (election_id) REFERENCES Elections(election_id)
+);
+
+CREATE TABLE Elections (
+    election_id INT AUTO_INCREMENT PRIMARY KEY,
+    election_name VARCHAR(255) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    ward_number INT,
+    district_id INT,
+    FOREIGN KEY (district_id) REFERENCES Districts(district_id)
+);
+
+CREATE TABLE Districts (
+    district_id INT AUTO_INCREMENT PRIMARY KEY,
+    district_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Wards (
+    ward_number INT PRIMARY KEY,
+    ward_name VARCHAR(255) NOT NULL,
+    district_id INT,
+    FOREIGN KEY (district_id) REFERENCES Districts(district_id)
+);
+
+CREATE TABLE Votes (
+    vote_id INT AUTO_INCREMENT PRIMARY KEY,
+    voter_id INT,
+    candidate_id INT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (voter_id) REFERENCES Voters(voter_id),
+    FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id)
+);
+
+CREATE TABLE Election_Results (
+    result_id INT AUTO_INCREMENT PRIMARY KEY,
+    election_id INT,
+    candidate_id INT,
+    total_votes INT NOT NULL,
+    percentage_votes DECIMAL(5,2),
+    FOREIGN KEY (election_id) REFERENCES Elections(election_id),
+    FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id)
+);
