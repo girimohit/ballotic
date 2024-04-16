@@ -18,6 +18,21 @@ export async function GET() {
   });
 }
 
+// Update Election
+export async function PUT(request: NextRequest) {
+  const { election_id, election_name, current_status } = await request.json();
+  console.log(election_id, election_name, current_status);
+  const updateElection = await query({
+    query:
+      `UPDATE elections ` +
+      `SET election_name='${election_name}', current_status=${current_status} ` +
+      `WHERE election_id = ${election_id}`,
+  });
+  return NextResponse.json({
+    updateElection,
+  });
+}
+
 export async function DELETE(request: NextRequest) {
   const { election_id } = await request.json();
   const response = await query({

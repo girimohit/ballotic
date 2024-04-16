@@ -96,3 +96,9 @@ LEFT JOIN districts AS d ON d.district_id = e.district_id;
 UPDATE voter
 SET username="katy_smith", email ="kate@gmail.com"
 WHERE voter_id=8;
+
+
+-- election updation by admin
+UPDATE elections
+SET election_name="panchayat election", current_status = true
+WHERE election_id = 4;

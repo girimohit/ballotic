@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { IoIosOptions } from "react-icons/io";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import UpdateElectionDialog from "./updateElectionDialog";
 
 export default function ElectionTable() {
   const [electionlist, setElectionlist] = useState<any[]>([]);
@@ -61,6 +63,7 @@ export default function ElectionTable() {
             <TableHead>Election Name</TableHead>
             <TableHead className="">Ward Name</TableHead>
             <TableHead className="text-left">District Name</TableHead>
+            <TableHead className="text-left">Status</TableHead>
             <TableHead className="text-center">Action</TableHead>
             {/* <TableHead className="text-left">Election Name</TableHead> */}
           </TableRow>
@@ -74,28 +77,18 @@ export default function ElectionTable() {
                 <TableCell>{i.election_name}</TableCell>
                 <TableCell>{i.ward_name}</TableCell>
                 <TableCell className="text-left">{i.district_name}</TableCell>
+                <TableCell className="text-left">{i.current_status}</TableCell>
                 {/* <TableCell className="text-left">{i.election_name}</TableCell> */}
                 <TableCell className="text-center">
                   <DropdownMenu>
                     <DropdownMenuTrigger><IoIosOptions /></DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-gray-300 text-black">
+                    <DropdownMenuContent >
 
-                      {/* <DropdownMenuItem> */}
-                      {/* {<Dialog>
-                        <DialogTrigger>Open</DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Are you absolutely sure?</DialogTitle>
-                            <DialogDescription>
-                              This action cannot be undone. This will permanently delete your account
-                              and remove your data from our servers.
-                            </DialogDescription>
-                          </DialogHeader>
-                        </DialogContent>
-                      </Dialog> */}
-                      {/* </DropdownMenuItem> */}
+                      <UpdateElectionDialog election={i} />
+                      <DropdownMenuSeparator />
+                      <Button className="border-none" variant="outline" onClick={() => deleteElection(i.voter_id)}>Delete</Button>
 
-                      <DropdownMenuItem onClick={() => deleteElection(i.election_id)}>Delete</DropdownMenuItem>
+                      {/* <DropdownMenuItem onClick={() => deleteElection(i.election_id)}>Delete</DropdownMenuItem> */}
 
                       {/* <DropdownMenuSeparator /> */}
                     </DropdownMenuContent>
