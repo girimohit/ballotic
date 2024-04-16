@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image"
-import { Button } from "./ui/button"
 import AvatarComponent from "./avatar"
 import VotePopup from "./votePopup"
 
@@ -34,27 +33,25 @@ export default function ElectionCard() {
             {/* <Button onClick={fetchElectionData} >Election</Button> */}
             {
                 election && election.map(i => (
-                    <div key={i.election_id} className="flex flex-col bg-gray-200 dark:bg-black rounded-3xl p-8 w-80 h-max md:w-[50%]  my-6 border border-gray-300 dark:border-gray-600 relative ">
+                    <div key={i.election_id} className="flex flex-col bg-gray-200 dark:bg-black rounded-3xl p-8 pb-10 w-80 min-h-fit md:w-[48%] overflow-hidden my-8 border border-gray-300 dark:border-gray-600 relative drop-shadow-[0_5px_15px_rgba(255,255,255,0.25)]">
+                        {i.current_status ?
+                            <span className="absolute top-0 left-0 p-2 px-4 text-sm  bg-green-600 rounded-br-3xl" >Live</span>
+                            :
+                            <span className="absolute top-0 left-0 p-2 px-4 text-sm  bg-red-600 rounded-br-3xl" >End</span>
+                        }
                         <h2 className="text-center text-3xl">{i.election_name}</h2>
-                        <div className="flex justify-around p-16  items-center">
-                            {/* <Image src="/election-banner.jpg" alt="Election Banner" width={200} height={100} className="rounded-t-lg" /> */}
-                            <AvatarComponent name={ i.candidates[0].candidate_name } />
-
-                            <h1 className="text-3xl">vs</h1>
-                            <AvatarComponent name={ i.candidates[1].candidate_name } />
-                            {/* <Image src="/election-banner.jpg" alt="Election Banner" width={200} height={100} className="rounded-t-lg" /> */}
+                        <div className="flex justify-around p-8 items-center">
+                            <AvatarComponent name={i.candidates[0].candidate_name} />
+                            <h1 className="text-3xl">Vs</h1>
+                            <AvatarComponent name={i.candidates[1].candidate_name} />
                         </div>
-                        <div className=" flex justify-between">
+                        <div className=" flex justify-between px-5">
                             <div className=" bottom-7 left-7">
                                 {/* <p>{i.StartDate}</p> */}
-                                <p>{i.end_date}</p>
+                                {/* <p>{i.end_date}</p> */}
                             </div>
-                            <div className=" right-7 bottom-7 flex items-center flex-col gap-2">
-                                {/* <button className="bg-black text-white dark:bg-white dark:text-black px-2 py-1 rounded-sm">Vote Now</button> */}
-                                {/* <Button>Vote Now</Button> */}
-                                {/* <VotePopup candidates={candidates} /> */}
-                                <VotePopup candidates={ i.candidates } />
-                                <h5 className="text-green-400">Live</h5>
+                            <div className=" flex items-center gap-4">
+                                <VotePopup candidates={i.candidates} electionID={i.election_id} isElectionLive={i.current_status} />
                             </div>
                         </div>
                     </div>

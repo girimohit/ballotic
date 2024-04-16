@@ -1,3 +1,7 @@
+"use client";
+
+import { ChangeEvent, useState } from "react";
+import { Button } from "./ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,7 +13,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "./ui/button";
 
 interface Candidate {
   candidate_id: number;
@@ -17,11 +20,56 @@ interface Candidate {
   party_name: string;
 }
 
-export default function VotePopup({ candidates }: { candidates: Candidate[] }) {
+export default function VotePopup({ candidates, electionID, isElectionLive }: { candidates: Candidate[]; electionID: number; isElectionLive: boolean }) {
+
+
+  const [winner, setWinner] = useState<string>('');
+
+  const handleResult = async () => {
+    // const electionRes = await fetch(`api/elections/result/${electionID}`);
+    const electionRes = await fetch(`api/elections/result/${electionID}`);
+    const data = await electionRes.json();
+    const voteCountCandidate1 = data.electionRes[0].vote_count
+    const voteCountCandidate2 = data.electionRes[1].vote_count
+    const winnerName = voteCountCandidate1 > voteCountCandidate2 ? candidates[0].candidate_name : candidates[1].candidate_name;
+    setWinner(winnerName);
+  }
+
+
+  const [selectedCandidate, setSelectedCandidate] = useState<number | null>(null);
+  const handleCandidateSelection = (event: ChangeEvent<HTMLInputElement>) => {
+    setSelectedCandidate(parseInt(event.target.value));
+  };
+
+  const handleVote = async () => {
+    const voterRes = await fetch("api/loggedinUser");
+    const voterData = await voterRes.json();
+    const voterID = voterData.loggedInUser[0].voter_id;
+    try {
+      if (selectedCandidate !== null) {
+        const response = await fetch("/api/vote", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            candidate_id: selectedCandidate,
+            election_id: electionID,
+            voter_id: voterID,
+          }),
+        });
+      }
+    } catch (error) { }
+  };
+
   return (
     <>
       <AlertDialog>
-        <AlertDialogTrigger className="bg-white text-black p-1 px-2 rounded-lg ">Vote Now</AlertDialogTrigger>
+        {isElectionLive ?
+          (<AlertDialogTrigger className="bg-white text-black p-1 px-2 rounded-lg ">
+            Vote Now
+          </AlertDialogTrigger>) : null
+        }
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-2xl">Choose a Candidate</AlertDialogTitle>
@@ -29,66 +77,44 @@ export default function VotePopup({ candidates }: { candidates: Candidate[] }) {
               {candidates &&
                 candidates.map((i) => (
                   <div key={i.candidate_id} className="text-lg">
+                    {/* {electionID} */}
                     <br />
-                    <input type="radio" id={`radio-${i.candidate_id}`} name="candidate" value={i.candidate_id} />
+                    <input
+                      type="radio"
+                      id={`radio-${i.candidate_id}`}
+                      name="candidate"
+                      value={i.candidate_id}
+                      onChange={handleCandidateSelection}
+                    />
                     <label htmlFor={`radio-${i.candidate_id}`}> {i.candidate_name}</label>
-
                   </div>
                 ))}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Vote</AlertDialogAction>
+            <AlertDialogAction onClick={handleVote}>Vote</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+
+      {/* Popup for Results */}
+      <AlertDialog>
+        <AlertDialogTrigger onClick={handleResult} className="bg-white text-black p-1 px-2 rounded-lg " >Result</AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-2xl">Winner</AlertDialogTitle>
+            <AlertDialogDescription className="uppercase">
+              {`Winner : ${winner}`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction >Close</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </>
   );
-}
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export default function VotePopup({ candidates }: { candidates: Candidate[] }) {
-//   return (
-//     <>
-//       <AlertDialog>
-//         <AlertDialogTrigger className="bg-white text-black p-1 px-2 rounded-lg ">Vote Now</AlertDialogTrigger>
-//         <AlertDialogContent>
-//           <AlertDialogHeader>
-//             <AlertDialogTitle className="text-2xl">Choose a Candidate</AlertDialogTitle>
-//             <AlertDialogDescription>
-//               {candidates &&
-//                 candidates.map((i) => (
-//                   <div key={i.candidate_id} className="text-lg">
-//                     <input type="radio" id={`radio-${i.candidate_id}`} name="candidate" value={i.candidate_id} />
-//                     <label htmlFor={`radio-${i.candidate_id}`}> {i.candidate_name}</label>
-//                   </div>
-//                 ))}
-//             </AlertDialogDescription>
-//           </AlertDialogHeader>
-//           <AlertDialogFooter>
-//             <AlertDialogCancel>Cancel</AlertDialogCancel>
-//             <AlertDialogAction>Vote</AlertDialogAction>
-//           </AlertDialogFooter>
-//         </AlertDialogContent>
-//       </AlertDialog>
-//     </>
-//   );
-// }

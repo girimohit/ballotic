@@ -137,3 +137,11 @@ CREATE TABLE Election_Results (
     FOREIGN KEY (election_id) REFERENCES Elections(election_id),
     FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id)
 );
+
+
+-- To add district_id to voter
+ALTER TABLE voter
+ADD COLUMN district_id INT NOT NULL DEFAULT 3
+ADD CONSTRAINT fk_district
+FOREIGN KEY (district_id)
+REFERENCES Districts(district_id)
