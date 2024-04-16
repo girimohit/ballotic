@@ -1,7 +1,7 @@
 import { ModeToggle } from "./ModeToggleBtn"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
-import Logout from "@/app/logout";
+import Logout from "@/app/(users)/logout";
 import { getSession, useSession } from "next-auth/react";
 import { userAgent } from "next/server";
 import { getToken } from "next-auth/jwt";

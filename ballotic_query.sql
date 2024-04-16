@@ -36,3 +36,58 @@ OR district_id IS NULL;
 UPDATE elections
 SET district_id = 3
 WHERE election_id = 1;
+
+
+-- add status column in elections table
+ALTER TABLE elections
+ADD COLUMN current_status bool default 1 not null;
+
+-- update election status
+UPDATE elections
+SET current_status = false
+WHERE election_id=3;
+
+
+
+SELECT v.*, d.district_name
+FROM voter v
+JOIN districts d ON v.district_id = d.district_id;
+
+
+SELECT v.*, d.district_name FROM voter AS v JOIN districts AS d ON v.district_id = d.district_id;
+
+
+-- selectnig and creating additional fields while fetching candidates list
+SELECT c.*, p.party_name, e.election_name
+FROM candidates AS c
+JOIN parties AS p ON p.party_id = c.party_id
+JOIN elections AS e ON e.election_id = c.election_id;
+
+
+-- add email column to the candidates table
+ALTER TABLE candidates
+ADD COLUMN email VARCHAR(50) NOT NULL;
+
+
+-- adding column entries in candidates table
+UPDATE candidates
+SET email = CASE 
+    WHEN candidate_id = 1 THEN 'amitshah@gmail.com'
+    WHEN candidate_id = 2 THEN 'soniyagandhi@gmail.com'
+    WHEN candidate_id = 3 THEN 'smritiirani@gmail.com'
+    WHEN candidate_id = 4 THEN 'manpreetsingh@gmail.com'
+    WHEN candidate_id = 5 THEN 'zakirnagar@gmail.com'
+    WHEN candidate_id = 6 THEN 'rajendrasahu@gmail.com'
+    ELSE email
+END
+ WHERE candidate_id IN (1, 2, 3, 4, 5, 6);
+ 
+ 
+ 
+-- TO fetch the election data with some additional columns 
+SELECT e.*, 
+IFNULL(w.ward_name, 'null')  AS ward_name, 
+IFNULL(d.district_name, 'null') AS district_name
+FROM elections AS e
+LEFT JOIN wards AS w ON w.ward_number = e.ward_number 
+LEFT JOIN districts AS d ON d.district_id = e.district_id;
