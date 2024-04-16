@@ -33,7 +33,7 @@ export default function ElectionCard() {
             {/* <Button onClick={fetchElectionData} >Election</Button> */}
             {
                 election && election.map(i => (
-                    <div key={i.election_id} className="flex flex-col bg-gray-200 dark:bg-black rounded-3xl p-8 pb-10 w-80 min-h-fit md:w-[48%] overflow-hidden my-8 border border-gray-300 dark:border-gray-600 relative drop-shadow-[0_5px_15px_rgba(255,255,255,0.25)]">
+                    <div key={i.election_id} className="flex flex-col bg-gray-200 dark:bg-black rounded-3xl p-8 pb-10 w-80 min-h-fit md:w-[48%] overflow-hidden my-8 border border-gray-300 dark:border-gray-600 relative drop-shadow-[0_5px_5px_rgba(255,255,255,0.25)]">
                         {i.current_status ?
                             <span className="absolute top-0 left-0 p-2 px-4 text-sm  bg-green-600 rounded-br-3xl" >Live</span>
                             :

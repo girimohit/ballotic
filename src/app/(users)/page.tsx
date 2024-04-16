@@ -11,7 +11,7 @@ export default function Home() {
         <h1 className="text-3xl">Welcome to Voting Management System</h1>
         <CandidatesList />
       </main>
-      <footer className="w-full h-56 bg-white flex gap-36 justify-center">Links Contact Social Media</footer>
+      <footer className="w-full h-56 bg-white text-black flex gap-36 justify-center">Links Contact Social Media</footer>
     </>
   );
 }

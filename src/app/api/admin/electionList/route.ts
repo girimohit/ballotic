@@ -1,11 +1,11 @@
 import { query } from "@/database/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   const electionList = await query({
     // query: "SELECT v.*, d.district_name FROM voter AS v JOIN districts AS d ON v.district_id = d.district_id;",
     query:
-      "SELECT e.*, "+ 
+      "SELECT e.*, " +
       "IFNULL(w.ward_name, 'null') AS ward_name, " +
       "IFNULL(d.district_name, 'null') AS district_name " +
       "FROM elections AS e " +
@@ -15,5 +15,15 @@ export async function GET() {
   });
   return NextResponse.json({
     electionList,
+  });
+}
+
+export async function DELETE(request: NextRequest) {
+  const { election_id } = await request.json();
+  const response = await query({
+    query: `DELETE FROM elections WHERE election_id = ${election_id}`,
+  });
+  return NextResponse.json({
+    response,
   });
 }

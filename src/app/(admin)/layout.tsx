@@ -5,6 +5,7 @@ import "/src/app/globals.css"
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionWrapper from "@/components/SessionWrapper";
 import AdminNavbar from "@/components/admin/adminNav";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +26,9 @@ export default async function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <main className="flex">
               <AdminNavbar />
-              {children}
+              <ScrollArea className="h-screen w-full">
+                {children}
+              </ScrollArea>
             </main>
           </ThemeProvider>
         </body>

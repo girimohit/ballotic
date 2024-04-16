@@ -1,5 +1,5 @@
 import { query } from "@/database/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   const candidateList = await query({
@@ -13,5 +13,15 @@ export async function GET() {
   });
   return NextResponse.json({
     candidateList,
+  });
+}
+
+export async function DELETE(request: NextRequest) {
+  const { candidate_id } = await request.json();
+  const response = await query({
+    query: `DELETE FROM candidates WHERE candidate_id = ${candidate_id}`,
+  });
+  return NextResponse.json({
+    response,
   });
 }

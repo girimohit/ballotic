@@ -7,7 +7,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { IoIosOptions } from "react-icons/io";
 import { useEffect, useState } from "react";
 
 export default function CandidateTable() {
@@ -15,19 +24,30 @@ export default function CandidateTable() {
 
   const fetchCandidateData = async () => {
     try {
-      const response = await fetch('/api/admin/candidateList');
+      const response = await fetch("/api/admin/candidateList");
       const data = await response.json();
       setCandidatelist(data.candidateList);
     } catch (error) {
-      console.log(error)
-
+      console.log(error);
     }
-  }
-
+  };
 
   useEffect(() => {
     fetchCandidateData();
   }, []);
+
+  const deleteCandidate = async (candidateID: number) => {
+    alert("Confirm Delete?");
+    const response = await fetch("/api/admin/candidateList", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        candidate_id: candidateID,
+      }),
+    });
+  };
 
   return (
     <>
@@ -40,25 +60,50 @@ export default function CandidateTable() {
             <TableHead className="w-8">Email</TableHead>
             <TableHead className="text-left">Party Name</TableHead>
             <TableHead className="text-left">Election Name</TableHead>
+            <TableHead className="text-center">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {candidatelist && (
-            candidatelist.map(i => (
-
-
+          {candidatelist &&
+            candidatelist.map((i) => (
               <TableRow key={i.voter_id}>
                 <TableCell className="text-center px-2 font-medium">{i.candidate_id}</TableCell>
                 <TableCell>{i.name}</TableCell>
                 <TableCell>{i.email}</TableCell>
                 <TableCell className="text-left">{i.party_name}</TableCell>
                 <TableCell className="text-left">{i.election_name}</TableCell>
+                <TableCell className="text-center">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <IoIosOptions />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {/* <DropdownMenuItem> */}
+                      {/* <Dialog>
+                        <DialogTrigger>Open</DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Are you absolutely sure?</DialogTitle>
+                            <DialogDescription>
+                              This action cannot be undone. This will permanently delete your account
+                              and remove your data from our servers.
+                            </DialogDescription>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog> */}
+                      {/* </DropdownMenuItem> */}
+
+                      <DropdownMenuItem onClick={() => deleteCandidate(i.candidate_id)}>
+                        Delete
+                      </DropdownMenuItem>
+                      {/* <DropdownMenuSeparator /> */}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
               </TableRow>
-            ))
-          )
-          }
+            ))}
         </TableBody>
       </Table>
     </>
-  )
+  );
 }
