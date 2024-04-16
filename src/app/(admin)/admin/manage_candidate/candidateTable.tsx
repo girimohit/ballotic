@@ -18,6 +18,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IoIosOptions } from "react-icons/io";
 import { useEffect, useState } from "react";
+import UpdateCandidateDialog from "./updateCandidateDialog";
+import { Button } from "@/components/ui/button";
+
 
 export default function CandidateTable() {
   const [candidatelist, setCandidatelist] = useState<any[]>([]);
@@ -77,27 +80,24 @@ export default function CandidateTable() {
                     <DropdownMenuTrigger>
                       <IoIosOptions />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      {/* <DropdownMenuItem> */}
-                      {/* <Dialog>
-                        <DialogTrigger>Open</DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Are you absolutely sure?</DialogTitle>
-                            <DialogDescription>
-                              This action cannot be undone. This will permanently delete your account
-                              and remove your data from our servers.
-                            </DialogDescription>
-                          </DialogHeader>
-                        </DialogContent>
-                      </Dialog> */}
-                      {/* </DropdownMenuItem> */}
 
+
+
+
+                    <DropdownMenuContent>
+                      <UpdateCandidateDialog user={i} />
+                      <DropdownMenuSeparator />
+                      <Button className="border-none" variant="outline" onClick={() => deleteCandidate(i.voter_id)}>Delete</Button>
+
+                      {/* 
                       <DropdownMenuItem onClick={() => deleteCandidate(i.candidate_id)}>
                         Delete
-                      </DropdownMenuItem>
+                      </DropdownMenuItem> */}
                       {/* <DropdownMenuSeparator /> */}
                     </DropdownMenuContent>
+
+
+
                   </DropdownMenu>
                 </TableCell>
               </TableRow>

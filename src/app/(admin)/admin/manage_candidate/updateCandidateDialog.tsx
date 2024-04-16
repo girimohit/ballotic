@@ -12,18 +12,16 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { FormEvent } from "react"
 
-interface User {
-    voter_id: number
-    username: string
+interface Candidate {
+    candidate_id: number
+    name: string
     emaill: string
-    role: string
-    ward_number: number
-    district_id: number
+    party_id: number
+    election_id: number
     district_name: string
 }
 
-export default function UpdateDialog({ user }: { user: User }) {
-
+export default function UpdateCandidateDialog({ user }: { user: Candidate }) {
     const updateVoter = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -31,12 +29,12 @@ export default function UpdateDialog({ user }: { user: User }) {
         formData.forEach((value, key) => {
             lowercaseData[key] = String(value).toLowerCase();
         });
-        const response = await fetch('http://localhost:3000/api/admin/voterList', {
+        const response = await fetch('http://localhost:3000/api/admin/candidateList', {
             method: 'PUT',
             body: JSON.stringify({
                 // name: formData.get('name'),
-                voter_id: user.voter_id,
-                username: lowercaseData['username'],
+                candidate_id: user.candidate_id,
+                name: lowercaseData['name'],
                 email: lowercaseData['email'],
             }),
         });
@@ -56,7 +54,7 @@ export default function UpdateDialog({ user }: { user: User }) {
                     </DialogDescription> */}
                 </DialogHeader>
                 <form onSubmit={updateVoter} className="grid gap-4 py-4 px-10">
-                    <Input id="username" name="username" className="col-span-3 w-full" placeholder="username" />
+                    <Input id="username" name="name" className="col-span-3 w-full" placeholder="username" />
                     <Input id="email" name="email" className="col-span-3" placeholder="email" />
                     <DialogFooter>
                         <Button type="submit">Save changes</Button>
@@ -71,40 +69,3 @@ export default function UpdateDialog({ user }: { user: User }) {
 
 
 
-
-
-
-
-
-
-
-// import {
-//     Dialog,
-//     DialogContent,
-//     DialogDescription,
-//     DialogHeader,
-//     DialogTitle,
-//     DialogTrigger,
-// } from "@/components/ui/dialog"
-
-
-
-// const UpdateDialog = () => {
-//     return (
-//         <>
-//             <Dialog>
-//                 <DialogTrigger>Open</DialogTrigger>
-//                 <DialogContent>
-//                     <DialogHeader>
-//                         <DialogTitle>Are you absolutely sure?</DialogTitle>
-//                         <DialogDescription>
-//                             This action cannot be undone. This will permanently delete your account
-//                             and remove your data from our servers.
-//                         </DialogDescription>
-//                     </DialogHeader>
-//                 </DialogContent>
-//             </Dialog>
-//         </>
-//     )
-// }
-// export default UpdateDialog

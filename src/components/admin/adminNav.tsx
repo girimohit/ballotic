@@ -26,7 +26,7 @@ const AdminNavbar = () => {
                 <div className="dark:bg-[#151516]  bg-gray-400 min-h-screen w-[25%] border-[0.11px] border-r-[#3e3e3e] shadow-gray-500 shadow-sm  relativeJ"  >
                     <div className="text-center text-4xl p-7 font-bold" ><h1>ballotic</h1></div>
                     <div className="flex flex-col px-7 py-5 items-start gap-3 dark:text-white">
-                        <Input placeholder="Search For Voters" />
+                        {/* <Input placeholder="Search For Voters" /> */}
                         <h1 className="text-gray-400 px-2" >MENU</h1>
                         <Link href={"/"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><MdSpaceDashboard className="text-xl" />DashBoard</Link>
                         <Link href={"/"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><FaHome className="text-xl" /> Home</Link>

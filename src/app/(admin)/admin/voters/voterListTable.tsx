@@ -27,7 +27,7 @@ import {
 
 import { useEffect, useState } from "react";
 import { IoIosOptions } from "react-icons/io";
-import UpdateDialog from "./updateDialog";
+import UpdateDialog from "./updateVoterDialog";
 import { Button } from "@/components/ui/button";
 
 export default function VoterTable() {

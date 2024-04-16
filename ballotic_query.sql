@@ -91,3 +91,8 @@ IFNULL(d.district_name, 'null') AS district_name
 FROM elections AS e
 LEFT JOIN wards AS w ON w.ward_number = e.ward_number 
 LEFT JOIN districts AS d ON d.district_id = e.district_id;
+
+-- voter updation by admin
+UPDATE voter
+SET username="katy_smith", email ="kate@gmail.com"
+WHERE voter_id=8;
