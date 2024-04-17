@@ -7,6 +7,7 @@ import { SiGoogletagmanager } from "react-icons/si";
 import { RiAdminFill } from "react-icons/ri";
 import { MdSpaceDashboard } from "react-icons/md";
 import { ModeToggle } from "../ModeToggleBtn";
+import { MdLeaderboard } from "react-icons/md";
 
 const AdminNavbar = () => {
     return (
@@ -23,21 +24,22 @@ const AdminNavbar = () => {
                 </div>
             </div> */}
 
-                <div className="dark:bg-[#151516]  bg-gray-400 min-h-screen w-[25%] border-[0.11px] border-r-[#3e3e3e] shadow-gray-500 shadow-sm  relativeJ"  >
-                    <div className="text-center text-4xl p-7 font-bold" ><h1>ballotic</h1></div>
-                    <div className="flex flex-col px-7 py-5 items-start gap-3 dark:text-white">
-                        {/* <Input placeholder="Search For Voters" /> */}
-                        <h1 className="text-gray-400 px-2" >MENU</h1>
-                        <Link href={"/"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><MdSpaceDashboard className="text-xl" />DashBoard</Link>
-                        <Link href={"/"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><FaHome className="text-xl" /> Home</Link>
-                        <Link href={"/admin/voters"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><MdManageAccounts className="text-xl" />Manage Voter</Link>
-                        <Link href={"/admin/manage_candidate"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><RiAdminFill className="text-xl" />Manage Candidate</Link>
-                        <Link href={"/admin/manage_election"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg " ><SiGoogletagmanager className="text-xl" />Manage Election</Link>
-                        {/* <Link href={"/"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg">Support</Link>
+            <div className="dark:bg-[#151516]  bg-gray-400 min-h-screen w-[25%] border-[0.11px] border-r-[#3e3e3e] shadow-gray-500 shadow-sm  relativeJ"  >
+                <div className="text-center text-4xl p-7 font-bold" ><h1>ballotic</h1></div>
+                <div className="flex flex-col px-7 py-5 items-start gap-3 dark:text-white">
+                    {/* <Input placeholder="Search For Voters" /> */}
+                    <h1 className="text-gray-400 px-2" >MENU</h1>
+                    <Link href={"/admin/dashboard"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><MdSpaceDashboard className="text-xl" />DashBoard</Link>
+                    <Link href={"/admin/leaderboard"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><MdLeaderboard className="text-xl" />LeaderBoard</Link>
+                    <Link href={"/"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><FaHome className="text-xl" /> Home</Link>
+                    <Link href={"/admin/voters"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><MdManageAccounts className="text-xl" />Manage Voter</Link>
+                    <Link href={"/admin/manage_candidate"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><RiAdminFill className="text-xl" />Manage Candidate</Link>
+                    <Link href={"/admin/manage_election"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg " ><SiGoogletagmanager className="text-xl" />Manage Election</Link>
+                    {/* <Link href={"/"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg">Support</Link>
                     <Link href={"/"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg">Contact</Link> */}
-                    </div>
-                    <span className="absolute top-3 right-3 z-10"><ModeToggle /></span>
                 </div>
+                <span className="absolute top-3 right-3 z-10"><ModeToggle /></span>
+            </div>
         </>
     )
 }

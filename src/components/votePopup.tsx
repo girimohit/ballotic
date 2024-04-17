@@ -66,7 +66,7 @@ export default function VotePopup({ candidates, electionID, isElectionLive }: { 
     <>
       <AlertDialog>
         {isElectionLive ?
-          (<AlertDialogTrigger className="bg-white text-black p-1 px-2 rounded-lg ">
+          (<AlertDialogTrigger className="bg-[#cc1b42] text-white p-1 px-2 rounded-lg ">
             Vote Now
           </AlertDialogTrigger>) : null
         }
@@ -101,7 +101,7 @@ export default function VotePopup({ candidates, electionID, isElectionLive }: { 
 
       {/* Popup for Results */}
       <AlertDialog>
-        <AlertDialogTrigger onClick={handleResult} className="bg-white text-black p-1 px-2 rounded-lg " >Result</AlertDialogTrigger>
+        <AlertDialogTrigger onClick={handleResult} className="dark:bg-white dark:text-black bg-black text-white p-1 px-2 rounded-lg " >Result</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-2xl">Winner</AlertDialogTitle>

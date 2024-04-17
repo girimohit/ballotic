@@ -26,7 +26,7 @@ export default async function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <main className="flex">
               <AdminNavbar />
-              <ScrollArea className="h-screen w-full">
+              <ScrollArea className="h-screen w-full scroll-smooth"  >
                 {children}
               </ScrollArea>
             </main>

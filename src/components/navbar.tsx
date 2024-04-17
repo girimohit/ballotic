@@ -16,13 +16,13 @@ const Navbar = async () => {
     return (
         <>
             <div className="w-full flex justify-center items-center  mt-4 fixed z-30">
-                <div className="h-14 w-[65%] flex font-semibold text-md  items-center justify-around text-[#121212] dark:text-white p-1 border-[#3e3e3e] border-[0.11px] rounded-full backdrop-blur-[12px] bg-gray-400/40 dark:bg-gray-900/20  " >
+                <div className="h-11 w-[65%] flex font-semibold text-md  items-center justify-around text-[#121212] dark:text-white p-1 border-[#3e3e3e] border-[0.11px] rounded-full backdrop-blur-[12px] bg-gray-400/20 dark:bg-gray-900/20  " >
                     {/* <div className="border-b-transparent outline absolute left-0 border-b-[3.5rem] rotate-90 rounded-xl border-l-[25px] border-l-transparent border-r-[25px] border-r-transparent h-0 w-[100px] ">loerm2</div> */}
                     <Link href={"/"} className="hover:text-lg transition-all delay-75 focus:text-xl">Home</Link>
                     <Link href={"/elections"} className="hover:text-lg transition-all delay-75 focus:text-xl">Elections</Link>
                     {/* <Link href={"/candidates"}>Candidates</Link> */}
                     {/* <Link href={"/results"}>Results</Link> */}
-                    <Link href={"/faq"} className="hover:text-lg transition-all delay-75 focus:text-xl">FAQs</Link>
+                    <Link href={"/faqs"} className="hover:text-lg transition-all delay-75 focus:text-xl">FAQs</Link>
                     <Link href={"/admin"} className="hover:text-lg transition-all delay-75 focus:text-xl">Admin</Link>
                     <span className=" border-[0.03px] border-[#4c4c4c] px-4 p-1 rounded-3xl">
                         {!!session &&
