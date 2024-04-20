@@ -4,39 +4,46 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Button } from "@/components/ui/button"
+import { query } from "@/database/db"
+import CustomResult from "./custom"
 
 
+
+const queries = [
+    {
+        id: 1,
+        query: "SELECT * FROM voter"
+    },
+    {
+        id: 2,
+        query: "SELECT * FROM candidates"
+    },
+    {
+        id: 3,
+        query: "SELECT * FROM wards"
+    }
+]
 const FAQsPage = () => {
+
+    // const individualResult = async () => {
+    // const response = await fetch('/api/custom-query', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({
+    //         query: queries[0],
+    //         values: []
+    //     })
+    // });
+    // }
+
+
+
+
     return (
         <>
             <main className="w-full flex items-center min-h-screen flex-col pt-24">
-                <Accordion type="single" collapsible className="w-[50%]" >
-                    <AccordionItem value="item-1">
-                        <AccordionTrigger className="w-full text-base p-3 py-5">Is it accessible?</AccordionTrigger>
-                        <AccordionContent className="px-5">
-                            Yes. It adheres to the WAI-ARIA design pattern.
-                        </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="item-2">
-                        <AccordionTrigger className="w-full text-base p-3 py-5">Is it accessible?</AccordionTrigger>
-                        <AccordionContent className="px-5">
-                            Yes. It adheres to the WAI-ARIA design pattern.
-                        </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="item-3">
-                        <AccordionTrigger className="w-full text-base p-3 py-5">Is it accessible?</AccordionTrigger>
-                        <AccordionContent className="px-5">
-                            Yes. It adheres to the WAI-ARIA design pattern.
-                        </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="item-4">
-                        <AccordionTrigger className="w-full text-base p-3 py-5">Is it accessible?</AccordionTrigger>
-                        <AccordionContent className="px-5">
-                            Yes. It adheres to the WAI-ARIA design pattern.
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
-
+                <CustomResult />
             </main>
         </>
     )

@@ -1,15 +1,22 @@
 import { Input } from "@/components/ui/input"
 import CandidateTable from "./candidateTable"
+import { Button } from "@/components/ui/button"
 
 const ManageCandidatePage = () => {
     return (
         <>
-            <main className="w-full relative flex items-center min-h-screen flex-col pt-16 px-32">
-                <Input className="w-64 absolute right-5 top-7" placeholder="Search For candidates" />
-                <br />
-                <h1 className="text-3xl font-mono">CANDIDATES</h1>
-                <br /><br />
-                <CandidateTable />
+            <main className="w-full min-h-screen flex-col pt-5 px-16">
+                <div className=" flex items-center justify-end gap-3">
+                    <Input className="w-64" placeholder="Search For candidates" />
+                    <Button>Add</Button>
+                </div>
+
+                <div className="w-full flex items-center  flex-col">
+                    <br />
+                    <h1 className="text-3xl font-mono">CANDIDATES</h1>
+                    <br /><br />
+                    <CandidateTable />
+                </div>
             </main>
         </>
     )

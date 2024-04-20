@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
   const response = await query({
     // query: `SELECT * FROM elections WHERE election_id=${election_id}`,
     query: `INSERT INTO votes (voter_id, candidate_id, election_id) VALUES (${voter_id}, ${candidate_id}, ${election_id})`,
+    // query: `SELECT * FROM votes WHERE election_id=${election_id}`,
   });
   console.log("Vote clicking response : ");
   console.log(response);

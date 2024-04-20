@@ -10,8 +10,7 @@ const RegisterVoter = async () => {
     }
     return (
         <>
-            <main className="w-full flex items-center min-h-screen flex-col pt-24">
-                <div>RegisterVoter</div>
+            <main className="w-full flex items-center min-h-screen flex-col pt-16">
                 <RegisterVoterForm />
             </main>
         </>

@@ -14,17 +14,18 @@ export default function DashboardPage() {
         <>
             <main className="w-full flex items-center min-h-screen flex-col pt-24">
                 <h1>Dashboard Page. Cant access without login</h1>
-                <Card>
+                <Card className="w-[30%]">
                     <CardHeader>
-                        <CardTitle>Card Title</CardTitle>
-                        <CardDescription>Card Description</CardDescription>
+                        <CardTitle>Voter Registered</CardTitle>
+                        <CardDescription>Card Description <br />45,500+ </CardDescription>
+
                     </CardHeader>
-                    <CardContent>
+                    {/* <CardContent>
                         <p>Card Content</p>
                     </CardContent>
                     <CardFooter>
                         <p>Card Footer</p>
-                    </CardFooter>
+                    </CardFooter> */}
                 </Card>
 
             </main>

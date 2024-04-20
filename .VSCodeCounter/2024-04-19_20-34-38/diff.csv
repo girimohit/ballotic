@@ -1,0 +1,16 @@
+"filename", "language", "MySQL SQL", "Database", "TypeScript", "JSON", "JavaScript", "JSON with Comments", "XML", "Markdown", "comment", "blank", "total"
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\.eslintrc.json", "JSON with Comments", 0, 0, 0, 0, 0, -3, 0, 0, 0, -1, -4
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, -23, 0, -14, -37
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\ballotic.sqlite3", "Database", 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\ballotic_query.sql", "MySQL SQL", -63, 0, 0, 0, 0, 0, 0, 0, -10, -31, -104
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\components.json", "JSON", 0, 0, 0, -17, 0, 0, 0, 0, 0, 0, -17
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\next.config.mjs", "JavaScript", 0, 0, 0, 0, -2, 0, 0, 0, -1, -2, -5
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\package-lock.json", "JSON", 0, 0, 0, -8199, 0, 0, 0, 0, 0, -1, -8200
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\package.json", "JSON", 0, 0, 0, -61, 0, 0, 0, 0, 0, -1, -62
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\postcss.config.js", "JavaScript", 0, 0, 0, 0, -6, 0, 0, 0, 0, -1, -7
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\public\next.svg", "XML", 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, -1
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\public\vercel.svg", "XML", 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, -1
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\tailwind.config.ts", "TypeScript", 0, 0, -78, 0, 0, 0, 0, 0, 0, -3, -81
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 0, -26, 0, 0, 0, -1, -27
+"c:\Users\mohit\Desktop\I\A.COLLEGE\Sem IV\DBMS\ballotic\utils\cn.ts", "TypeScript", 0, 0, -5, 0, 0, 0, 0, 0, 0, -2, -7
+"Total", "-", -63, 0, -83, -8277, -8, -29, -2, -23, -11, -58, -8554

@@ -8,13 +8,13 @@ interface AvatarName {
 export default function AvatarComponent({ name }: AvatarName) {
     return (
         <>
-            <div className="flex flex-col items-center gap-3">
-                <Avatar className="size-32">
+            <div className="flex flex-col items-center gap-3 flex-wrap">
+                <Avatar className="md:size-32 size-16">
                     {/* <AvatarImage src="https://githb.com/shadcn.png" /> */}
                     <AvatarImage src="/user.png" />
                     <AvatarFallback>{name}</AvatarFallback>
                 </Avatar>
-                <p>{name}</p>
+                <p className="flex flex-wrap" >{name}</p>
             </div>
         </>
     )

@@ -58,6 +58,7 @@ export default function VotePopup({ candidates, electionID, isElectionLive }: { 
             voter_id: voterID,
           }),
         });
+        console.log(response.json());
       }
     } catch (error) { }
   };
