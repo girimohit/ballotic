@@ -69,7 +69,7 @@ export default function CandidateTable() {
         <TableBody>
           {candidatelist &&
             candidatelist.map((i) => (
-              <TableRow key={i.voter_id}>
+              <TableRow key={i.candidate_id}>
                 <TableCell className="text-center px-2 font-medium">{i.candidate_id}</TableCell>
                 <TableCell>{i.name}</TableCell>
                 <TableCell>{i.email}</TableCell>
@@ -87,7 +87,7 @@ export default function CandidateTable() {
                     <DropdownMenuContent>
                       <UpdateCandidateDialog user={i} />
                       <DropdownMenuSeparator />
-                      <Button className="border-none" variant="outline" onClick={() => deleteCandidate(i.voter_id)}>Delete</Button>
+                      <Button className="border-none" variant="outline" onClick={() => deleteCandidate(i.candidate_id)}>Delete</Button>
 
                       {/* 
                       <DropdownMenuItem onClick={() => deleteCandidate(i.candidate_id)}>

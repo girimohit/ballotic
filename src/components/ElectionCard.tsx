@@ -40,11 +40,13 @@ export default function ElectionCard() {
                             <span className="absolute top-0 left-0 p-2 px-4 text-sm  bg-red-600 rounded-br-3xl" >End</span>
                         }
                         <h2 className="text-center text-xl md:text-3xl">{i.election_name}</h2>
-                        <div className="flex justify-around p-3 md:p-8 items-center ">
-                            <AvatarComponent name={i.candidates[0].candidate_name} />
-                            <h1 className="md:text-3xl text-lg">Vs</h1>
-                            <AvatarComponent name={i.candidates[1].candidate_name} />
-                        </div>
+                        {i.candidates && i.candidates.length > 1 &&
+                            <div className="flex justify-around p-3 md:p-8 items-center ">
+                                <AvatarComponent name={i.candidates[0].candidate_name || "Candidate1"} />
+                                <h1 className="md:text-3xl text-lg">Vs</h1>
+                                <AvatarComponent name={i.candidates[1].candidate_name || "Candidate 2"} />
+                            </div>
+                        }
                         <div className=" flex justify-end md:px-5">
                             {/* <div className=" bottom-7 left-7">
                                 <p>{i.StartDate}</p>
