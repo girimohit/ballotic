@@ -34,7 +34,7 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   const { voter_id } = await request.json();
   const response = await query({
-    query: `DELETE FROM voterd WHERE voter_id = ${voter_id}`,
+    query: `DELETE FROM voter WHERE voter_id = ${voter_id}`,
   });
   return NextResponse.json({
     response,

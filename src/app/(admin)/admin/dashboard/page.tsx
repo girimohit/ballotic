@@ -8,7 +8,6 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
-
 export default function DashboardPage() {
     return (
         <>
@@ -20,6 +19,7 @@ export default function DashboardPage() {
                         <CardDescription>Card Description <br />45,500+ </CardDescription>
 
                     </CardHeader>
+                    
                     {/* <CardContent>
                         <p>Card Content</p>
                     </CardContent>

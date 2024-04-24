@@ -6,6 +6,9 @@ import { JWT } from "next-auth/jwt";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 
+// import NextAuth from "next-auth/next";
+// import { authOptions } from "./options";
+
 const handler = NextAuth({
   session: {
     strategy: "jwt", // Use database-backed sessions
@@ -79,8 +82,8 @@ const handler = NextAuth({
     },
     async session({ session, user, token }): Promise<Session> {
       // async session(session: Session, token: JWT) {
-        
-        console.log(user);
+
+      console.log(user);
       // session.user = token; // Assuming `user` is the key to store user data in the session
       session.user = user;
       // console.log("PRINTING SESSION ");
@@ -91,3 +94,7 @@ const handler = NextAuth({
 });
 
 export { handler as GET, handler as POST };
+
+// const handler = NextAuth(authOptions)
+
+// export { handler as GET, handler as POST };
