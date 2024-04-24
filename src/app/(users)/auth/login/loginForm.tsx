@@ -22,7 +22,8 @@ export default function LoginForm() {
         const response = await signIn('credentials', {
             name: lowercaseData['username'],
             password: lowercaseData['pass'],
-            redirect: false,
+            redirect: true,
+            callbackUrl: "/"
         });
         console.log("Response of the SignIn from loginform.tsx : ");
         console.log({ response });

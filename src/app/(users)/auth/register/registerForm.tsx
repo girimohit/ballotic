@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { FormEvent } from "react";
 
@@ -9,7 +10,7 @@ export default function RegisterVoterForm() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        
+
         //  Create an object to store the lowercase data
         const lowercaseData: { [key: string]: string } = {};
 
@@ -29,6 +30,14 @@ export default function RegisterVoterForm() {
                 district_id: lowercaseData['district_id'],
             }),
         });
+        if (response.ok) {
+            await signIn("credentials", {
+                name: lowercaseData['name'],
+                password: lowercaseData['pass'],
+                redirect: true,
+                callbackUrl: "/"
+            })
+        }
         console.log(response);
     }
 
