@@ -1,7 +1,6 @@
 import { query } from "@/database/db";
 import { NextRequest, NextResponse } from "next/server";
 
-
 // Get all voters
 export async function GET() {
   const voterList = await query({
@@ -21,9 +20,7 @@ export async function PUT(request: NextRequest) {
   const { voter_id, username, email } = await request.json();
   const updateVoter = await query({
     query:
-      `UPDATE voter ` + 
-      `SET username='${username}', email ='${email}' ` + 
-      `WHERE voter_id = '${voter_id}'`,
+      `UPDATE voter ` + `SET username='${username}', email ='${email}' ` + `WHERE voter_id = '${voter_id}'`,
   });
   return NextResponse.json({
     updateVoter,
@@ -39,4 +36,17 @@ export async function DELETE(request: NextRequest) {
   return NextResponse.json({
     response,
   });
+}
+
+export async function POST(request: Request) {
+  try {
+    const { name, password, email, role, ward_num, district_id } = await request.json();
+    const response = await query({
+      query: `INSERT INTO voter (username, password, email, role, ward_number, district_id) VALUES ('${name}', '${password}', '${email}', '${role}', ${ward_num}, ${district_id})`,
+    });
+    return NextResponse.redirect("http://localhost:3000/auth/login");
+  } catch (error) {
+    console.log(error);
+  }
+  return NextResponse.json({ message: "Success" });
 }

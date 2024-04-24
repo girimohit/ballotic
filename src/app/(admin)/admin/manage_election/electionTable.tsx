@@ -72,7 +72,7 @@ export default function ElectionTable() {
         <TableBody>
           {electionlist && (
             electionlist.map(i => (
-              <TableRow key={i.voter_id}>
+              <TableRow key={i.election_id}>
                 <TableCell className="text-center px-2 font-medium">{i.election_id}</TableCell>
                 <TableCell>{i.election_name}</TableCell>
                 <TableCell>{i.ward_name}</TableCell>
@@ -86,7 +86,7 @@ export default function ElectionTable() {
 
                       <UpdateElectionDialog election={i} />
                       <DropdownMenuSeparator />
-                      <Button className="border-none" variant="outline" onClick={() => deleteElection(i.voter_id)}>Delete</Button>
+                      <Button className="border-none" variant="outline" onClick={() => deleteElection(i.election_id)}>Delete</Button>
 
                       {/* <DropdownMenuItem onClick={() => deleteElection(i.election_id)}>Delete</DropdownMenuItem> */}
 

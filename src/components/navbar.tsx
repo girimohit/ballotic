@@ -10,8 +10,10 @@ const Navbar = async () => {
     const session = await getServerSession();
     // const session = await getSession();
     // const { data: sessions, status } = useSession();
+    const username = session?.user?.name || "user";
     console.log("SEssions : ")
     console.log(session?.user)
+    console.log(session?.user?.name)
 
     return (
         <>
@@ -24,10 +26,11 @@ const Navbar = async () => {
                     {/* <Link href={"/results"}>Results</Link> */}
                     <Link href={"/faqs"} className="hover:text-lg transition-all delay-75 focus:text-xl">FAQs</Link>
                     <Link href={"/admin"} className="hover:text-lg transition-all delay-75 focus:text-xl">Admin</Link>
-                    <span className=" border-[0.03px] border-[#4c4c4c] px-4 p-1 rounded-3xl">
+                    {/* <span className=" border-[0.03px] border-[#4c4c4c] px-4 p-1 rounded-3xl"> */}
+                    <span>
                         {!!session &&
                             <span>
-                                <Logout />
+                                <Logout name={username} />
                             </span>
                         }
                         {!session && <Link href={"/auth/login"} className="hover:text-lg transition-all delay-75 focus:text-xl">Login</Link>}

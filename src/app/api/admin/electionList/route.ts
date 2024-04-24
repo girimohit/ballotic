@@ -1,4 +1,5 @@
 import { query } from "@/database/db";
+import { Console } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
@@ -41,4 +42,18 @@ export async function DELETE(request: NextRequest) {
   return NextResponse.json({
     response,
   });
+}
+
+export async function POST(request: Request) {
+  try {
+    const { election_name, start_date, end_date, ward_num, district_id } = await request.json();
+    console.log(election_name, start_date, end_date, ward_num, district_id);
+    const response = await query({
+      query: `INSERT INTO elections (election_name, end_date, ward_number, district_id) VALUES ('${election_name}', '${end_date}', ${ward_num}, ${district_id})`,
+    });
+    return NextResponse.redirect("http://localhost:3000/auth/login");
+  } catch (error) {
+    console.log(error);
+  }
+  return NextResponse.json({ message: "Success" });
 }
