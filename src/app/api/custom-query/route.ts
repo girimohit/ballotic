@@ -8,5 +8,5 @@ export async function POST(request: NextRequest) {
   });
   // console.log("Custom Query: ");
   console.log(custom_query);
-  return Response.json(custom_query);
+  return NextResponse.json({ custom_query });
 }

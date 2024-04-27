@@ -42,9 +42,6 @@ const AddVoter = () => {
                 district_id: lowercaseData['district_id'],
             }),
         });
-        if (response.ok) {
-            redirect("/");
-        }
     }
     return (
         <Dialog>
@@ -63,7 +60,7 @@ const AddVoter = () => {
                     <Input type="text" name="role" placeholder="Role" required />
                     <Input type="number" name="ward_number" placeholder="ward_number" required />
                     <Input type="number" name="district_id" placeholder="District ID" required />
-                    <Button type="submit">Register</Button>
+                    <Button type="submit">Register Voter</Button>
                 </form>
             </DialogContent>
         </Dialog>
