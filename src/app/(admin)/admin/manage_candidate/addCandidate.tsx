@@ -61,7 +61,7 @@ const AddCandidateByAdmin = () => {
                     <Input type="email" name="candidate_email" placeholder="Email" required />
                     <Input type="number" name="party_id" placeholder="Party ID" required />
                     <Input type="number" name="election_id" placeholder="Election ID" required />
-                    <Button type="submit">Register</Button>
+                    <Button type="submit">Register Candidate</Button>
                 </form>
             </DialogContent>
         </Dialog>

@@ -55,7 +55,7 @@ const AddElectionByAdmin = () => {
                     <Input type="date" name="end_date" required />
                     <Input type="text" name="ward_number" placeholder="Ward Number" required />
                     <Input type="text" name="district_id" placeholder="District ID" required />
-                    <Button type="submit">Register</Button>
+                    <Button type="submit">Register Election</Button>
                 </form>
             </DialogContent>
         </Dialog>
