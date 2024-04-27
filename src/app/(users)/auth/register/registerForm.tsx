@@ -43,7 +43,7 @@ export default function RegisterVoterForm() {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center mt-16 p-11 border border-white rounded-2xl ">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center mt-16 p-11 dark:border dark:border-white border border-black rounded-2xl ">
                 <h1>Register Form</h1>
                 <input type="text" name="name" placeholder="Name" className="bg-transparent border-b border-gray-300 focus:border-none p-2" required />
                 <input type="password" name="pass" placeholder="Password" className="bg-transparent border-b border-gray-300 focus:border-none p-2" required />
