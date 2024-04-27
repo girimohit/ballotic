@@ -4,12 +4,14 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import AddVoter from "./addVoter"
 import RegisterVoterForm from "@/app/(users)/auth/register/registerForm"
+import { IoFilterOutline } from "react-icons/io5";
 
 const Voters = () => {
     return (
         <>
             <main className="w-full min-h-screen flex-col pt-5 px-16">
                 <div className=" flex items-center justify-end gap-3">
+                    <IoFilterOutline />
                     <Input className="w-64" placeholder="Search For candidates" />
                     <AddVoter />
                     {/* <Button>Add</Button> */}

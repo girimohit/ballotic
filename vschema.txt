@@ -63,11 +63,6 @@ Sure, here's the revised schema without any image or logo fields:
 
 
 
-
-
-
-
-
 CREATE DATABASE ballotic;
 
 USE ballotic;
@@ -145,3 +140,164 @@ ADD COLUMN district_id INT NOT NULL DEFAULT 3
 ADD CONSTRAINT fk_district
 FOREIGN KEY (district_id)
 REFERENCES Districts(district_id)
+
+
+
+
+
+
+
+
+
+
+
+
+reverse engineer
+CREATE TABLE IF NOT EXISTS `ballotic`.`candidates` (
+  `candidate_id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `party_id` INT NULL DEFAULT NULL,
+  `election_id` INT NULL DEFAULT NULL,
+  `email` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`candidate_id`),
+  INDEX `party_id` (`party_id` ASC) VISIBLE,
+  INDEX `election_id` (`election_id` ASC) VISIBLE,
+  CONSTRAINT `candidates_ibfk_1`
+    FOREIGN KEY (`party_id`)
+    REFERENCES `ballotic`.`parties` (`party_id`),
+  CONSTRAINT `candidates_ibfk_2`
+    FOREIGN KEY (`election_id`)
+    REFERENCES `ballotic`.`elections` (`election_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 28
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+
+
+CREATE TABLE IF NOT EXISTS `ballotic`.`election_results` (
+  `result_id` INT NOT NULL AUTO_INCREMENT,
+  `election_id` INT NULL DEFAULT NULL,
+  `candidate_id` INT NULL DEFAULT NULL,
+  `total_votes` INT NOT NULL,
+  `percentage_votes` DECIMAL(5,2) NULL DEFAULT NULL,
+  PRIMARY KEY (`result_id`),
+  INDEX `election_id` (`election_id` ASC) VISIBLE,
+  INDEX `candidate_id` (`candidate_id` ASC) VISIBLE,
+  CONSTRAINT `election_results_ibfk_1`
+    FOREIGN KEY (`election_id`)
+    REFERENCES `ballotic`.`elections` (`election_id`),
+  CONSTRAINT `election_results_ibfk_2`
+    FOREIGN KEY (`candidate_id`)
+    REFERENCES `ballotic`.`candidates` (`candidate_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+
+
+CREATE TABLE IF NOT EXISTS `ballotic`.`elections` (
+  `election_id` INT NOT NULL AUTO_INCREMENT,
+  `election_name` VARCHAR(255) NOT NULL,
+  `start_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `end_date` DATE NOT NULL,
+  `ward_number` INT NULL DEFAULT NULL,
+  `district_id` INT NULL DEFAULT NULL,
+  `current_status` TINYINT(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`election_id`),
+  INDEX `district_id` (`district_id` ASC) VISIBLE,
+  CONSTRAINT `elections_ibfk_1`
+    FOREIGN KEY (`district_id`)
+    REFERENCES `ballotic`.`districts` (`district_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 26
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+
+
+
+CREATE TABLE IF NOT EXISTS `ballotic`.`wards` (
+  `ward_number` INT NOT NULL,
+  `ward_name` VARCHAR(255) NOT NULL,
+  `district_id` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`ward_number`),
+  INDEX `district_id` (`district_id` ASC) VISIBLE,
+  CONSTRAINT `wards_ibfk_1`
+    FOREIGN KEY (`district_id`)
+    REFERENCES `ballotic`.`districts` (`district_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+
+
+
+CREATE TABLE IF NOT EXISTS `ballotic`.`votes` (
+  `vote_id` INT NOT NULL AUTO_INCREMENT,
+  `voter_id` INT NULL DEFAULT NULL,
+  `candidate_id` INT NULL DEFAULT NULL,
+  `timestamp` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `election_id` INT NOT NULL,
+  PRIMARY KEY (`vote_id`),
+  INDEX `voter_id` (`voter_id` ASC) VISIBLE,
+  INDEX `candidate_id` (`candidate_id` ASC) VISIBLE,
+  INDEX `election_id` (`election_id` ASC) VISIBLE,
+  CONSTRAINT `votes_ibfk_1`
+    FOREIGN KEY (`voter_id`)
+    REFERENCES `ballotic`.`voter` (`voter_id`),
+  CONSTRAINT `votes_ibfk_2`
+    FOREIGN KEY (`candidate_id`)
+    REFERENCES `ballotic`.`candidates` (`candidate_id`),
+  CONSTRAINT `votes_ibfk_3`
+    FOREIGN KEY (`election_id`)
+    REFERENCES `ballotic`.`elections` (`election_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 11
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+
+
+
+CREATE TABLE IF NOT EXISTS `ballotic`.`parties` (
+  `party_id` INT NOT NULL AUTO_INCREMENT,
+  `party_name` VARCHAR(255) NOT NULL,
+  `party_leader` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`party_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 12
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+
+
+CREATE TABLE IF NOT EXISTS `ballotic`.`districts` (
+  `district_id` INT NOT NULL AUTO_INCREMENT,
+  `district_name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`district_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 11
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+
+
+
+CREATE TABLE IF NOT EXISTS `ballotic`.`voter` (
+  `voter_id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `role` ENUM('admin', 'voter') NOT NULL,
+  `ward_number` INT NOT NULL,
+  `district_id` INT NOT NULL,
+  PRIMARY KEY (`voter_id`),
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
+  UNIQUE INDEX `voter_id_UNIQUE` (`voter_id` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+  INDEX `fk_district` (`district_id` ASC) VISIBLE,
+  INDEX `voter_ibfk_1` (`ward_number` ASC) VISIBLE,
+  CONSTRAINT `fk_district`
+    FOREIGN KEY (`district_id`)
+    REFERENCES `ballotic`.`districts` (`district_id`),
+  CONSTRAINT `voter_ibfk_1`
+    FOREIGN KEY (`ward_number`)
+    REFERENCES `ballotic`.`wards` (`ward_number`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 26
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci

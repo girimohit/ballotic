@@ -25,7 +25,7 @@ const Navbar = async () => {
                     {/* <Link href={"/candidates"}>Candidates</Link> */}
                     {/* <Link href={"/results"}>Results</Link> */}
                     <Link href={"/faqs"} className="hover:text-lg transition-all delay-75 focus:text-xl">FAQs</Link>
-                    <Link href={"/admin"} className="hover:text-lg transition-all delay-75 focus:text-xl">Admin</Link>
+                    <Link href={"/admin/voters"} className="hover:text-lg transition-all delay-75 focus:text-xl">Admin</Link>
                     {/* <span className=" border-[0.03px] border-[#4c4c4c] px-4 p-1 rounded-3xl"> */}
                     <span>
                         {!!session &&

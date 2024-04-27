@@ -6,12 +6,13 @@ export async function GET() {
   const session = await getServerSession();
   // const session = await getSession();
   // const { data: sessions, status } = useSession();
-  console.log("SEssionssssssssssssssssssssssssss : ");
-  console.log(session?.user?.name);
-  const username = session?.user?.name
+  // console.log("SEssionssssssssssssssssssssssssss : ");
+  // console.log(session?.user?.name);
+  const username = session?.user?.name;
 
   const elections = await query({
-    query: "SELECT * FROM elections WHERE (district_id) IN (SELECT district_id FROM voter WHERE username=?) OR district_id IS NULL",
+    query:
+      "SELECT * FROM elections WHERE (district_id) IN (SELECT district_id FROM voter WHERE username=?) OR district_id IS NULL",
     values: [username],
   });
 
@@ -31,5 +32,3 @@ export async function GET() {
     elections,
   });
 }
-
-

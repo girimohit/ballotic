@@ -37,7 +37,7 @@ export default function LoginForm() {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center mt-16 p-11 border border-white rounded-2xl">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center mt-16 p-11 dark:border border dark:border-white border-black rounded-2xl">
                 <h1>Login Form</h1>
                 <input type="text" name="username" required placeholder="Username" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
                 <input type="password" name="pass" required placeholder="Password" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
