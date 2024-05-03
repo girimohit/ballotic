@@ -1,5 +1,3 @@
-
-
 "use client";
 import { signIn } from 'next-auth/react';
 import { useRouter } from "next/navigation";
@@ -28,7 +26,7 @@ export default function LoginForm() {
         console.log("Response of the SignIn from loginform.tsx : ");
         console.log({ response });
         if (!response?.error) {
-            router.push('/elections');
+            router.push('/');
             router.refresh();
         } else {
             const error = 'Invalid credentials';

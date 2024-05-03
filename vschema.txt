@@ -174,24 +174,7 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 
 
-CREATE TABLE IF NOT EXISTS `ballotic`.`election_results` (
-  `result_id` INT NOT NULL AUTO_INCREMENT,
-  `election_id` INT NULL DEFAULT NULL,
-  `candidate_id` INT NULL DEFAULT NULL,
-  `total_votes` INT NOT NULL,
-  `percentage_votes` DECIMAL(5,2) NULL DEFAULT NULL,
-  PRIMARY KEY (`result_id`),
-  INDEX `election_id` (`election_id` ASC) VISIBLE,
-  INDEX `candidate_id` (`candidate_id` ASC) VISIBLE,
-  CONSTRAINT `election_results_ibfk_1`
-    FOREIGN KEY (`election_id`)
-    REFERENCES `ballotic`.`elections` (`election_id`),
-  CONSTRAINT `election_results_ibfk_2`
-    FOREIGN KEY (`candidate_id`)
-    REFERENCES `ballotic`.`candidates` (`candidate_id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
+
 
 
 CREATE TABLE IF NOT EXISTS `ballotic`.`elections` (

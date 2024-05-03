@@ -86,8 +86,13 @@ const queries = [
         query: "SELECT d.district_name, COUNT(w.ward_number) AS num_wards " +
             "FROM districts d " +
             "LEFT JOIN wards w ON d.district_id = w.district_id " +
-            "GROUP BY d.district_id",
+            "GROUP BY d.district_id",   
         question: "Number of wards of each district"
+    },
+    {
+        id: 12,
+        query: "SELECT ward_number, AVG(num_voters) AS average_voters_per_ward FROM (SELECT w.ward_number, COUNT(vo.voter_id) AS num_voters FROM wards w LEFT JOIN voter vo ON w.ward_number = vo.ward_number GROUP BY w.ward_number) AS ward_voter_counts GROUP BY ward_number",
+        question: "Find the average number of voters per ward"
     }
 ];
 
