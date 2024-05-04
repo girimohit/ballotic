@@ -14,4 +14,4 @@ export { default } from "next-auth/middleware";
 //   return NextResponse.redirect(new URL("/sign-in", request.url));
 // }
 
-export const config = { matcher: ["/dashboard", "/elections", "/admin/:path*", "/sign-in"] };
+// export const config = { matcher: ["/dashboard", "/elections", "/admin/:path*", "/sign-in"] };
