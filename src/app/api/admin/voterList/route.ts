@@ -5,10 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET() {
   const voterList = await query({
     query:
-      "SELECT v.*, d.district_name " +
+      "SELECT v.*, d.district_name, w.ward_name " +
       "FROM voter AS v " +
       "JOIN districts AS d " +
-      "ON v.district_id = d.district_id",
+      "ON v.district_id = d.district_id " +
+      "JOIN wards AS w " +
+      "ON v.ward_number = w.ward_number",
   });
   return NextResponse.json({
     voterList,
