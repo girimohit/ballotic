@@ -21,13 +21,13 @@ export default function LoginForm() {
             name: lowercaseData['username'],
             password: lowercaseData['pass'],
             redirect: true,
-            callbackUrl: "/"
+            callbackUrl: "/"  //this will redirect after login
         });
         console.log("Response of the SignIn from loginform.tsx : ");
         console.log({ response });
         if (!response?.error) {
-            router.push('/');
-            router.refresh();
+            // router.push('/faqs');
+            router.refresh();     //redirect after signin, but won't work
         } else {
             const error = 'Invalid credentials';
         }

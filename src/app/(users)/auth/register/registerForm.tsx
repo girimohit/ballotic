@@ -35,7 +35,7 @@ export default function RegisterVoterForm() {
                 name: lowercaseData['name'],
                 password: lowercaseData['pass'],
                 redirect: true,
-                callbackUrl: "/"
+                callbackUrl: "/"  //redirect after signin, but won't work
             })
         }
         console.log(response);  // console.log                          

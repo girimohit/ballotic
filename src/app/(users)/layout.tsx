@@ -22,7 +22,7 @@ export default async function RootLayout({
   return (
     <SessionWrapper>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={`inter.className dark:bg-black bg-white`}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <SmoothScrolling>
               <Navbar />
