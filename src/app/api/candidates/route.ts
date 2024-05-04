@@ -5,7 +5,9 @@
 //     });
 //   }
 // }
-// "use client";
+"use client";
+
+
 import { query } from "@/database/db";
 import { NextResponse } from "next/server";
 
