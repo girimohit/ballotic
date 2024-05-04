@@ -1,5 +1,6 @@
 "use client"
 import RegisterVoterForm from "@/app/(users)/auth/register/registerForm"
+import { AlertDialogFooter } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -66,4 +67,4 @@ const AddVoter = () => {
         </Dialog>
     )
 }
-export default AddVoter
+export default AddVoter;

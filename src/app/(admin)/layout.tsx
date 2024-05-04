@@ -24,9 +24,9 @@ export default async function RootLayout({
       <html lang="en">
         <body className={inter.className} >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <main className="flex">
+            <main className="flex dark:bg-black bg-gray-400 h-screen">
               <AdminNavbar />
-              <ScrollArea className="h-screen w-full scroll-smooth"  >
+              <ScrollArea className="w-full scroll-smooth rounded-2xl dark:bg-[#151516]  bg-white mt-16 pb-8"  >
                 {children}
               </ScrollArea>
             </main>

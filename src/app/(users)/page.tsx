@@ -13,7 +13,7 @@ export default function Home() {
 
   return (
     <>
-      <main className="flex items-center justify-center min-h-screen flex-col pt-14 scroll-smooth">
+      <main className="flex items-center  min-h-screen flex-col pt-16 scroll-smooth">
         <div id="hero-section">
           <Image src={"/hero_image.png"} alt="Hero Image" width={700} height={700}></Image>
         </div>
@@ -21,7 +21,7 @@ export default function Home() {
 
         {/* <CandidatesList /> */}
       </main>
-      <footer className="w-full h-56 bg-white text-black flex gap-36 justify-center">Links Contact Social Media</footer>
+      <footer className="w-full h-56 dark:bg-white bg-[#ebedef] text-black flex gap-36 justify-center">Links Contact Social Media</footer>
     </>
   );
 }

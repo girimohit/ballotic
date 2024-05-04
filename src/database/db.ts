@@ -7,10 +7,10 @@ interface QueryOptions {
 
 export async function query({ query, values = [] }: QueryOptions): Promise<any> {
   const db: Connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "ballotic",
+    host: process.env.DB_HOST || "localhost", // Use environment variable or default to localhost
+    user: process.env.DB_USER || "root", // Use environment variable or default to root
+    password: process.env.DB_PASSWORD || "root", // Use environment variable or default to root
+    database: process.env.DB_DATABASE || "ballotic",
   });
   try {
     const [results] = await db.execute(query, values);
