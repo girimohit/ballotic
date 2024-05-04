@@ -5,7 +5,7 @@
 //     });
 //   }
 // }
-"use client";
+
 
 
 import { query } from "@/database/db";
