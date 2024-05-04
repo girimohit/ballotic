@@ -5,7 +5,7 @@
 //     });
 //   }
 // }
-// "use client";
+
 
 const voters = [
   {
