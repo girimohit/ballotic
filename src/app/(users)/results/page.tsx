@@ -2,8 +2,6 @@
 "use client"
 
 import { useState } from 'react';
-// import { useRouter } from 'next/router';
-// import { useRouter } from 'next/navigation';
 
 const EmailForm = () => {
     const [email, setEmail] = useState('');
@@ -19,7 +17,6 @@ const EmailForm = () => {
 
         const data = await response.text();
         alert(data);
-        // router.push('/verify-otp');
     };
     return (
         <div className='flex justify-center items-center pt-24 flex-col gap-5'>
@@ -28,6 +25,7 @@ const EmailForm = () => {
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" required />
                 <button type="submit">Send OTP</button>
             </form>
+            {email}
         </div>
     );
 };

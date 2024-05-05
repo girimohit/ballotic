@@ -1,3 +1,17 @@
+
+very complex queries:
+  api/elections/result/:id 
+  api/admin/voterList
+  [...nextauth]/route.ts
+
+
+
+
+
+
+
+
+
 Sure, here's the revised schema without any image or logo fields:
 
 1. **Users Table**:
@@ -564,11 +578,6 @@ Table: voter
 
 
 
-very complex queries:
-  api/elections/result/:id 
-  api/admin/voterList
-
-
 TODO
   create a voted table which will store the info about the voter voted into which election and then will help to identify which election cards should be shown to the voter and which should be not
 
@@ -723,4 +732,15 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 
+CREATE TABLE otps (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    otp VARCHAR(6) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
+
+ALTER TABLE ballotic.otps 
+ADD CONSTRAINT fkotp
+FOREIGN KEY (user_id)    
+REFERENCES ballotic.voter(voter_id);
