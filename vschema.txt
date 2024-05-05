@@ -1,5 +1,6 @@
 
 very complex queries:
+  api/elections/route.ts (most)
   api/elections/result/:id 
   api/admin/voterList
   [...nextauth]/route.ts
@@ -745,3 +746,11 @@ ALTER TABLE ballotic.otps
 ADD CONSTRAINT fkotp
 FOREIGN KEY (user_id)    
 REFERENCES ballotic.voter(voter_id);
+
+
+
+create table voted(id int primary key auto_increment, 
+voter_id int, 
+election_id int, 
+foreign key(election_id) references elections(election_id), 
+foreign key(voter_id) references voter(voter_id));

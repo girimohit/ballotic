@@ -94,7 +94,7 @@ export default function CandidateTable() {
                 || item.election_name.toLowerCase().includes(searchCandidate.toLowerCase());
               return resRows;
             }).map((i) => (
-              <TableRow key={i.candidate_id}>
+              <TableRow key={i.candidate_id} className="h-12">
                 <TableCell className="text-center px-2 font-medium">{i.candidate_id}</TableCell>
                 <TableCell>{i.name}</TableCell>
                 <TableCell>{i.email}</TableCell>

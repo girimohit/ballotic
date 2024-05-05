@@ -102,7 +102,7 @@ export default function VotePopup({ candidates, electionID, isElectionLive }: { 
 
       {/* Popup for Results */}
       <AlertDialog>
-        <AlertDialogTrigger onClick={handleResult} className="dark:bg-white dark:text-black bg-black text-white p-1 px-2 rounded-lg " >Result</AlertDialogTrigger>
+        {/* <AlertDialogTrigger onClick={handleResult} className="dark:bg-white dark:text-black bg-black text-white p-1 px-2 rounded-lg " >Result</AlertDialogTrigger> */}
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-2xl">Winner</AlertDialogTitle>

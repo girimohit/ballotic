@@ -72,17 +72,12 @@ export default function VoterTable() {
 
     return (
         <>
-            {/* <select name="" id="">
-                <option value="alfa">ef</option>
-                <option value="alfa">ef</option>
-                <option value="alfa">ef</option>
-            </select> */}
-            <div className="flex justify-end gap-5  w-full mb-5">
-                <Input className="w-64 border-gray-600" placeholder="Search For candidates" onChange={(e) => searchVoterVoter(e.target.value.trim())} />
+            <div className="flex justify-end gap-5 w-full mb-5">
+                <Input className="w-64 border-gray-800" placeholder="Search For candidates" onChange={(e) => searchVoterVoter(e.target.value.trim())} />
                 <AddVoter />
             </div>
-
             <br /><h1 className="text-3xl font-mono">VOTERS</h1><br />
+
             <Table>
                 {/* <TableCaption>VOTER LIST.</TableCaption> */}
                 <TableHeader>
@@ -93,8 +88,8 @@ export default function VoterTable() {
                         <TableHead className="text-center">Ward Number</TableHead>
                         <TableHead className="text-center">District</TableHead>
                         <TableHead className="text-center">Action</TableHead>
-                    </TableRow>
-                </TableHeader>
+                    </TableRow >
+                </TableHeader >
                 <TableBody className="">
                     {voterlist &&
                         voterlist.filter((item) => {
@@ -107,7 +102,7 @@ export default function VoterTable() {
                             return res;
                         }).map((i) => (
                             // <TableRow key={i.voter_id} className={i.voter_id % 2 === 0 ? `bg-gray-300` : `bg-transparent`} >
-                            <TableRow key={i.voter_id}  >
+                            <TableRow key={i.voter_id} className="h-12" >
                                 <TableCell className="text-center px-4 font-medium">{i.voter_id}</TableCell>
                                 <TableCell>{i.username}</TableCell>
                                 <TableCell>{i.email}</TableCell>
@@ -129,7 +124,7 @@ export default function VoterTable() {
                             </TableRow>
                         ))}
                 </TableBody>
-            </Table>
+            </Table >
         </>
     );
 }

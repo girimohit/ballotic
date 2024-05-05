@@ -27,20 +27,12 @@ export default async function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <main className="flex dark:bg-black bg-gray-400 h-screen">
               <AdminNavbar />
-              <ScrollArea className="w-full scroll-smooth rounded-2xl dark:bg-[#151516]  bg-white mt-16 pb-8"  >
+              <ScrollArea className="w-full scroll-smooth rounded-2xl dark:bg-[#121215]  bg-white/50 mt-16 pb-8"  >
                 {children}
               </ScrollArea>
             </main>
           </ThemeProvider>
-          <iframe
-            src="https://www.chatbase.co/chatbot-iframe/2SHQ_47d7gvAP8Nc1qFst"
-            title="Chatbot"
-            width="100%"
-            className="h-full min-h-[700px]"
-          ></iframe>
-
         </body>
-
       </html>
     </SessionWrapper>
   );
