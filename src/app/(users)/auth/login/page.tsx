@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default async function LoginVoter() {
     const session = await getServerSession();
     if (session) {
-        console.log("Login secssion redirected");
+        // console.log("Login secssion redirected");
         redirect('/') //redirect after signin, but won't work
     }
     // const fn = NodemailerTransporter("");

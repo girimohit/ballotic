@@ -3,6 +3,7 @@ very complex queries:
   api/elections/result/:id 
   api/admin/voterList
   [...nextauth]/route.ts
+  api/elections/route.ts
 
 
 

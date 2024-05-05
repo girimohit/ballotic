@@ -5,12 +5,14 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import NodemailerTransporter from '@/app/api/send-otp/emailTransporter';
+import { useToast } from "@/components/ui/use-toast"
 
 export default function LoginForm() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [otpSent, setOtpSent] = useState(false);
+    const { toast } = useToast()
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -72,10 +74,24 @@ export default function LoginForm() {
                 <input onChange={(e) => setUsername(e.target.value.trim())} type="text" name="username" required placeholder="Username" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
                 <input type="password" name="pass" required placeholder="Password" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
                 <input onChange={(e) => setEmail(e.target.value.trim())} type="email" name="email" required placeholder="Email" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
+
+                {/* OTP input */}
                 {otpSent &&
                     <input type="number" name="otp" required placeholder="Username" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
                 }
-                <button className='text-blue-500 hover:text-blue-700' onClick={sendOtpHandle} disabled={otpSent} >send otp</button>
+
+                {/* OTP button */}
+                {email && email.length > 2 && email.includes("@") && email.includes(".") && 
+                    <Button className='text-blue-500 hover:text-blue-700 bg-transparent hover:bg-transparent' onClick={(e) => {
+                        if (email.length > 2 && email.includes("@") && email.includes(".")) {
+                            sendOtpHandle(e);
+                            toast({
+                                description: "Your message has been sent.",
+                            })
+                        }
+                    }} disabled={otpSent} >send otp</Button>
+                }
+
                 <Button type="submit">Login</Button>
                 <span>Dont have an Account?
                     <Link href="/auth/register" className="text-blue-500 hover:text-blue-700"> Register</Link>
