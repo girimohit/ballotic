@@ -39,6 +39,9 @@ export default function UpdateElectionDialog({ election }: { election: Candidate
                 current_status: lowercaseData['current_status'],
             }),
         });
+        if (response.status === 200) {
+            window.location.reload();
+        }
     }
 
 
@@ -55,8 +58,8 @@ export default function UpdateElectionDialog({ election }: { election: Candidate
                     </DialogDescription> */}
                 </DialogHeader>
                 <form onSubmit={updateElection} className="grid gap-4 py-4 px-10">
-                    <Input name="election_name"  className="col-span-3 w-full" placeholder="Election Name" />
-                    <Input name="current_status"  className="col-span-3" placeholder="Status" />
+                    <Input name="election_name" className="col-span-3 w-full" placeholder="Election Name" />
+                    <Input name="current_status" className="col-span-3" placeholder="Status" />
                     <DialogFooter>
                         <Button type="submit">Save changes</Button>
                     </DialogFooter>

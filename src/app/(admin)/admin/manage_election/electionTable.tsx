@@ -20,6 +20,9 @@ import { IoIosOptions } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import UpdateElectionDialog from "./updateElectionDialog";
+import { FaWindows } from "react-icons/fa";
+import AddElectionByAdmin from "./addElection";
+import { Input } from "@/components/ui/input";
 
 export default function ElectionTable() {
   const [electionlist, setElectionlist] = useState<any[]>([]);
@@ -50,11 +53,24 @@ export default function ElectionTable() {
         election_id: electionID,
       }),
     });
+    if (response.status === 200) {
+      window.location.reload();
+    }
   };
+
+  // Search logic 
+  const [searchElection, setSearchElection] = useState("");
 
 
   return (
     <>
+      <div className="flex justify-end gap-5 w-full mb-5" >
+        <Input onChange={(e) => setSearchElection(e.target.value.trim())} className="w-64 border-gray-600" placeholder="Search for election" />
+        <AddElectionByAdmin />
+      </div>
+      <br />
+      <h1 className="text-3xl font-mono">ELECTIONS</h1>
+      <br />
       <Table>
         {/* <TableCaption>VOTER LIST.</TableCaption> */}
         <TableHeader>
@@ -71,7 +87,14 @@ export default function ElectionTable() {
         </TableHeader>
         <TableBody>
           {electionlist && (
-            electionlist.map(i => (
+            electionlist.filter((item) => {
+              const resRows = searchElection === ""
+                ? item
+                : item.election_name.toLowerCase().includes(searchElection.toLowerCase())
+                || item.ward_name.toLowerCase().includes(searchElection.toLowerCase())
+                || item.district_name.toLowerCase().includes(searchElection.toLowerCase());
+              return resRows;
+            }).map(i => (
               <TableRow key={i.election_id}>
                 <TableCell className="text-center px-2 font-medium">{i.election_id}</TableCell>
                 <TableCell>{i.election_name}</TableCell>
@@ -83,7 +106,6 @@ export default function ElectionTable() {
                   <DropdownMenu>
                     <DropdownMenuTrigger><IoIosOptions /></DropdownMenuTrigger>
                     <DropdownMenuContent >
-
                       <UpdateElectionDialog election={i} />
                       <DropdownMenuSeparator />
                       <Button className="border-none" variant="outline" onClick={() => deleteElection(i.election_id)}>Delete</Button>

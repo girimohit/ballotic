@@ -20,6 +20,8 @@ import { IoIosOptions } from "react-icons/io";
 import { useEffect, useState } from "react";
 import UpdateCandidateDialog from "./updateCandidateDialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import AddCandidateByAdmin from "./addCandidate";
 
 
 export default function CandidateTable() {
@@ -50,10 +52,25 @@ export default function CandidateTable() {
         candidate_id: candidateID,
       }),
     });
+    if (response.status === 200) {
+      window.location.reload();
+    }
   };
+
+  // Filter Logic 
+  const [searchCandidate, setSearchCandidate] = useState("");
 
   return (
     <>
+      <div className="flex justify-end gap-5 w-full mb-5" >
+        <Input onChange={(e) => setSearchCandidate(e.target.value.trim())} className="w-64 border-gray-600" placeholder="Search For candidates" />
+        <AddCandidateByAdmin />
+      </div>
+      <br />
+      <h1 className="text-3xl font-mono">CANDIDATES</h1>
+      <br />
+
+
       <Table>
         {/* <TableCaption>VOTER LIST.</TableCaption> */}
         <TableHeader>
@@ -68,7 +85,15 @@ export default function CandidateTable() {
         </TableHeader>
         <TableBody>
           {candidatelist &&
-            candidatelist.map((i) => (
+            candidatelist.filter((item) => {
+              const resRows = searchCandidate === ""
+                ? item
+                : item.name.toLowerCase().includes(searchCandidate.toLowerCase())
+                || item.email.toLowerCase().includes(searchCandidate.toLowerCase())
+                || item.party_name.toLowerCase().includes(searchCandidate.toLowerCase())
+                || item.election_name.toLowerCase().includes(searchCandidate.toLowerCase());
+              return resRows;
+            }).map((i) => (
               <TableRow key={i.candidate_id}>
                 <TableCell className="text-center px-2 font-medium">{i.candidate_id}</TableCell>
                 <TableCell>{i.name}</TableCell>

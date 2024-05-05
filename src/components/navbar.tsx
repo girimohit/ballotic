@@ -11,9 +11,9 @@ const Navbar = async () => {
     // const session = await getSession();
     // const { data: sessions, status } = useSession();
     const username = session?.user?.name || "user";
-    console.log("SEssions : ")
-    console.log(session?.user)
-    console.log(session?.user?.name)
+    // console.log("SEssions : ")
+    // console.log(session?.user)
+    // console.log(session?.user?.name)
 
     return (
         <>
@@ -23,7 +23,7 @@ const Navbar = async () => {
                     <Link href={"/"} className="hover:text-lg transition-all delay-75 focus:text-xl">Home</Link>
                     <Link href={"/elections"} className="hover:text-lg transition-all delay-75 focus:text-xl">Elections</Link>
                     {/* <Link href={"/candidates"}>Candidates</Link> */}
-                    {/* <Link href={"/results"}>Results</Link> */}
+                    <Link href={"/results"}>Results</Link>
                     <Link href={"/faqs"} className="hover:text-lg transition-all delay-75 focus:text-xl">FAQs</Link>
                     <Link href={"/admin/voters"} className="hover:text-lg transition-all delay-75 focus:text-xl">Admin</Link>
                     {/* <span className=" border-[0.03px] border-[#4c4c4c] px-4 p-1 rounded-3xl"> */}
@@ -33,7 +33,7 @@ const Navbar = async () => {
                                 <Logout name={username} />
                             </span>
                         }
-                        {!session && <Link href={"/auth/login"} className="hover:text-lg transition-all delay-75 focus:text-xl">Login</Link>}
+                        {!session && <Link href={"/auth/login"} className="bg-[#cb1a41] p-1 px-3 rounded-xl text-white hover:text-lg transition-all delay-75 focus:text-xl">Login</Link>}
                     </span>
                     <ModeToggle />
                 </div>

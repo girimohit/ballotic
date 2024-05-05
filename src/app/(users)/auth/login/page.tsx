@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth"
 import LoginForm from "./loginForm"
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
+import NodemailerTransporter from "@/app/api/send-otp/emailTransporter";
 
 export const metadata: Metadata = {
     title: "Login",
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
 export default async function LoginVoter() {
     const session = await getServerSession();
     if (session) {
-        console.log("Login secssion redirected");
+        // console.log("Login secssion redirected");
         redirect('/') //redirect after signin, but won't work
     }
+    // const fn = NodemailerTransporter("");
     return (
         <>
             <main className="w-full flex items-center min-h-screen flex-col pt-24">

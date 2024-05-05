@@ -1,12 +1,19 @@
 "use client";
 import { signIn } from 'next-auth/react';
 import { useRouter } from "next/navigation";
-import { FormEvent } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import NodemailerTransporter from '@/app/api/send-otp/emailTransporter';
+import { useToast } from "@/components/ui/use-toast"
 
 export default function LoginForm() {
     const router = useRouter();
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [otpSent, setOtpSent] = useState(false);
+    const { toast } = useToast()
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -17,9 +24,13 @@ export default function LoginForm() {
         formData.forEach((value, key) => {
             lowercaseData[key] = String(value).toLowerCase();
         });
+        setEmail(lowercaseData['email']);
+        setUsername(lowercaseData['username']);
         const response = await signIn('credentials', {
             name: lowercaseData['username'],
             password: lowercaseData['pass'],
+            email: lowercaseData['email'],
+            otp: lowercaseData['otp'],
             redirect: true,
             callbackUrl: "/"  //this will redirect after login
         });
@@ -33,14 +44,55 @@ export default function LoginForm() {
         }
     }
 
+
+    const sendOtpHandle = async (e: any) => {
+        e.preventDefault();
+        const response = await fetch("/api/send-otp", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: email, username: username }),
+        });
+
+        const data = await response.text();
+        alert(data);
+        setOtpSent(true);
+    };
+
+    // const sendOtpHandle = async () => {
+    //     NodemailerTransporter(email);
+    // }
+
+
     return (
         <>
+            {username}
+            {email}
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center mt-16 p-11 dark:border border dark:border-white border-black rounded-2xl">
                 <h1>Login Form</h1>
-                <input type="text" name="username" required placeholder="Username" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
+                <input onChange={(e) => setUsername(e.target.value.trim())} type="text" name="username" required placeholder="Username" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
                 <input type="password" name="pass" required placeholder="Password" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
+                <input onChange={(e) => setEmail(e.target.value.trim())} type="email" name="email" required placeholder="Email" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
+
+                {/* OTP input */}
+                {otpSent &&
+                    <input type="number" name="otp" required placeholder="Username" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
+                }
+
+                {/* OTP button */}
+                {email && email.length > 2 && email.includes("@") && email.includes(".") && 
+                    <Button className='text-blue-500 hover:text-blue-700 bg-transparent hover:bg-transparent' onClick={(e) => {
+                        if (email.length > 2 && email.includes("@") && email.includes(".")) {
+                            sendOtpHandle(e);
+                            toast({
+                                description: "Your message has been sent.",
+                            })
+                        }
+                    }} disabled={otpSent} >send otp</Button>
+                }
+
                 <Button type="submit">Login</Button>
-                {/* {error && <p className="text-red-500">{error}</p>} */}
                 <span>Dont have an Account?
                     <Link href="/auth/register" className="text-blue-500 hover:text-blue-700"> Register</Link>
                 </span>

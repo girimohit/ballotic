@@ -29,6 +29,8 @@ import { useEffect, useState } from "react";
 import { IoIosOptions } from "react-icons/io";
 import UpdateDialog from "./updateVoterDialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input"
+import AddVoter from "./addVoter";
 
 export default function VoterTable() {
     const [voterlist, setVoterlist] = useState<any[]>([]);
@@ -59,10 +61,28 @@ export default function VoterTable() {
                 voter_id: voterID,
             }),
         });
+        if (response.status === 200) {
+            window.location.reload();
+        }
     };
+
+
+    // Filtering login
+    const [searchVoter, searchVoterVoter] = useState("");
 
     return (
         <>
+            {/* <select name="" id="">
+                <option value="alfa">ef</option>
+                <option value="alfa">ef</option>
+                <option value="alfa">ef</option>
+            </select> */}
+            <div className="flex justify-end gap-5  w-full mb-5">
+                <Input className="w-64 border-gray-600" placeholder="Search For candidates" onChange={(e) => searchVoterVoter(e.target.value.trim())} />
+                <AddVoter />
+            </div>
+
+            <br /><h1 className="text-3xl font-mono">VOTERS</h1><br />
             <Table>
                 {/* <TableCaption>VOTER LIST.</TableCaption> */}
                 <TableHeader>
@@ -77,12 +97,21 @@ export default function VoterTable() {
                 </TableHeader>
                 <TableBody className="">
                     {voterlist &&
-                        voterlist.map((i) => (
-                            <TableRow key={i.voter_id}>
+                        voterlist.filter((item) => {
+                            const res = searchVoter === ""
+                                ? item
+                                : item.username.toLowerCase().includes(searchVoter.toLowerCase())
+                                || item.email.toLowerCase().includes(searchVoter.toLowerCase())
+                                || item.district_name.toLowerCase().includes(searchVoter.toLowerCase())
+                                || item.ward_number.toString().includes(searchVoter.toLowerCase());
+                            return res;
+                        }).map((i) => (
+                            // <TableRow key={i.voter_id} className={i.voter_id % 2 === 0 ? `bg-gray-300` : `bg-transparent`} >
+                            <TableRow key={i.voter_id}  >
                                 <TableCell className="text-center px-4 font-medium">{i.voter_id}</TableCell>
                                 <TableCell>{i.username}</TableCell>
                                 <TableCell>{i.email}</TableCell>
-                                <TableCell className="text-center">{i.ward_number}</TableCell>
+                                <TableCell className="text-center">{i.ward_name}</TableCell>
                                 <TableCell className="text-center">{i.district_name}</TableCell>
                                 <TableCell className="text-center">
                                     <DropdownMenu>
