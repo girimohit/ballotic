@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import SessionWrapper from "@/components/SessionWrapper";
 import AdminNavbar from "@/components/admin/adminNav";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,7 +32,15 @@ export default async function RootLayout({
               </ScrollArea>
             </main>
           </ThemeProvider>
+          <iframe
+            src="https://www.chatbase.co/chatbot-iframe/2SHQ_47d7gvAP8Nc1qFst"
+            title="Chatbot"
+            width="100%"
+            className="h-full min-h-[700px]"
+          ></iframe>
+
         </body>
+
       </html>
     </SessionWrapper>
   );

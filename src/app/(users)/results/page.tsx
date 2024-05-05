@@ -19,13 +19,13 @@ const EmailForm = () => {
         alert(data);
     };
     return (
-        <div className='flex justify-center items-center pt-24 flex-col gap-5'>
-            <h1>Email OTP Verification</h1>
+        <div className='flex justify-center items-center pt-24 flex-col gap-5 min-h-screen'>
+            {/* <h1>Email OTP Verification</h1>
             <form onSubmit={handleSubmit} className='flex flex-col gap-5'>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" required />
                 <button type="submit">Send OTP</button>
             </form>
-            {email}
+            {email} */}
         </div>
     );
 };

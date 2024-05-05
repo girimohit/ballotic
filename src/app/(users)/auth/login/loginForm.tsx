@@ -56,7 +56,7 @@ export default function LoginForm() {
         });
 
         const data = await response.text();
-        alert(data);
+        // alert(data);
         setOtpSent(true);
     };
 
@@ -81,12 +81,13 @@ export default function LoginForm() {
                 }
 
                 {/* OTP button */}
-                {email && email.length > 2 && email.includes("@") && email.includes(".") && 
-                    <Button className='text-blue-500 hover:text-blue-700 bg-transparent hover:bg-transparent' onClick={(e) => {
+                {email && email.length > 2 && email.includes("@") && email.includes(".") &&
+                    <Button className='text-blue-500 hover:text-blue-700 bg-transparent hover:bg-transparent ' onClick={(e) => {
                         if (email.length > 2 && email.includes("@") && email.includes(".")) {
                             sendOtpHandle(e);
                             toast({
-                                description: "Your message has been sent.",
+                                description: `OTP has been sent to ${email}`,
+                                className: "dark:bg-white dark:text-black bg-black text-white text-lg",
                             })
                         }
                     }} disabled={otpSent} >send otp</Button>

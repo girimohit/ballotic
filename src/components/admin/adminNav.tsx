@@ -35,6 +35,7 @@ const AdminNavbar = () => {
                     <Link href={"/admin/manage_candidate"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg"><RiAdminFill className="text-xl" />Manage Candidate</Link>
                     <Link href={"/admin/manage_election"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg " ><SiGoogletagmanager className="text-xl" />Manage Election</Link>
                     <Link href={"/faqs"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg " ><GiNotebook className="text-xl" />Additional Queries</Link>
+                    <Link href={"/dashboard"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg " ><MdSpaceDashboard className="text-xl" />Dashboard</Link>
                     {/* <Link href={"/admin/manage_election"} className="flex items-center gap-2 p-1.5 px-3 w-full rounded-lg " ><IoIosSettings className="text-xl" />Settings</Link> */}
                 </div>
                 <span className="absolute top-3 right-4 z-10"><ModeToggle /></span>

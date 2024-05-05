@@ -92,7 +92,8 @@ export default function ElectionTable() {
                 ? item
                 : item.election_name.toLowerCase().includes(searchElection.toLowerCase())
                 || item.ward_name.toLowerCase().includes(searchElection.toLowerCase())
-                || item.district_name.toLowerCase().includes(searchElection.toLowerCase());
+                || item.district_name.toLowerCase().includes(searchElection.toLowerCase())
+                || item.current_status.toString().includes(searchElection.toLowerCase());
               return resRows;
             }).map(i => (
               <TableRow key={i.election_id}>

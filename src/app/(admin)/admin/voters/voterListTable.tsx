@@ -103,7 +103,7 @@ export default function VoterTable() {
                                 : item.username.toLowerCase().includes(searchVoter.toLowerCase())
                                 || item.email.toLowerCase().includes(searchVoter.toLowerCase())
                                 || item.district_name.toLowerCase().includes(searchVoter.toLowerCase())
-                                || item.ward_number.toString().includes(searchVoter.toLowerCase());
+                                || item.ward_name.toLowerCase().includes(searchVoter.toLowerCase());
                             return res;
                         }).map((i) => (
                             // <TableRow key={i.voter_id} className={i.voter_id % 2 === 0 ? `bg-gray-300` : `bg-transparent`} >
