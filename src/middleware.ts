@@ -15,3 +15,4 @@ export const config = { matcher: ["/dashboard", "/elections", "/admin/:path*", "
 
 //   return NextResponse.redirect(new URL("/sign-in", request.url));
 // }
+
