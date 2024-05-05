@@ -106,7 +106,8 @@ export default function VoterTable() {
                                 || item.ward_number.toString().includes(searchVoter.toLowerCase());
                             return res;
                         }).map((i) => (
-                            <TableRow key={i.voter_id}>
+                            // <TableRow key={i.voter_id} className={i.voter_id % 2 === 0 ? `bg-gray-300` : `bg-transparent`} >
+                            <TableRow key={i.voter_id}  >
                                 <TableCell className="text-center px-4 font-medium">{i.voter_id}</TableCell>
                                 <TableCell>{i.username}</TableCell>
                                 <TableCell>{i.email}</TableCell>

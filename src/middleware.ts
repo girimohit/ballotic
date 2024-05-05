@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export { default } from "next-auth/middleware";
 
+export const config = { matcher: ["/dashboard", "/elections", "/admin/:path*", "/sign-in"] };
+
 // export async function middleware(request: NextRequest) {
 //   const token = await getToken({ req: request });
 //   const url = request.nextUrl;
@@ -13,5 +15,3 @@ export { default } from "next-auth/middleware";
 
 //   return NextResponse.redirect(new URL("/sign-in", request.url));
 // }
-
-export const config = { matcher: ["/dashboard", "/elections", "/admin/:path*", "/sign-in"] };
