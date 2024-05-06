@@ -10,11 +10,11 @@ export async function GET() {
     query: `SELECT * 
     FROM elections 
     WHERE 
-      (district_id) IN 
+      ((district_id) IN 
          (SELECT district_id 
           FRoM voter 
           where username='${username}') 
-      OR district_id IS NULL
+      OR district_id IS NULL)
       AND election_id NOT IN 
         (SELECT election_id 
         FROM voted 
