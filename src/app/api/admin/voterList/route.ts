@@ -4,13 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 // Get all voters
 export async function GET() {
   const voterList = await query({
-    query:
-      "SELECT v.*, d.district_name, w.ward_name " +
-      "FROM voter AS v " +
-      "JOIN districts AS d " +
-      "ON v.district_id = d.district_id " +
-      "JOIN wards AS w " +
-      "ON v.ward_number = w.ward_number",
+    query: `SELECT v.*, d.district_name, w.ward_name,
+    CONCAT(
+        FLOOR(DATEDIFF(CURRENT_DATE(), dob) / 365), 
+        'y ', 
+        FLOOR((DATEDIFF(CURRENT_DATE(), dob) % 365) / 30), 
+        'm'
+    ) AS age_years_months
+      FROM voter AS v 
+      JOIN districts AS d  
+      ON v.district_id = d.district_id 
+      JOIN wards AS w 
+      ON v.ward_number = w.ward_number`,
   });
   return NextResponse.json({
     voterList,

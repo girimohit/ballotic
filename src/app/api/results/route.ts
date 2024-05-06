@@ -10,20 +10,19 @@ export async function GET() {
     query: `SELECT * 
     FROM elections 
     WHERE 
-      (district_id) IN 
-         (SELECT district_id 
-          FRoM voter 
-          where username='${username}') 
-      OR district_id IS NULL
-      AND election_id NOT IN 
-        (SELECT election_id 
-        FROM voted 
-        WHere voter_id = 
-          (SELECT voter_id 
-            FROM voter 
-            WHERE username='${username}'))
-      ANd current_status=1
-      and end_date > current_date()`,
+        (district_id) IN 
+            (SELECT district_id 
+             FROM voter 
+             WHERE username='${username}') 
+        OR district_id IS NULL
+        AND election_id NOT IN 
+            (SELECT election_id 
+             FROM voted 
+             WHERE voter_id = 
+                 (SELECT voter_id 
+                  FROM voter 
+                  WHERE username='${username}'))
+        AND current_status = 0`,
     // values: [username],
   });
 
