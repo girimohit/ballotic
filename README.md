@@ -15,7 +15,9 @@ bun dev
 ```
 
 If above commands are not working, run:
-```npm i```
+```bash
+npm i
+```
 then again run any of those 3 commands
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
