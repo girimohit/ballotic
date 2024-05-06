@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image"
 import AvatarComponent from "@/components/avatar";
 import VotePopup from "@/components/votePopup";
+import VoteResultPopup from "./voteResultPopup";
 // import VotePopup from "./votePopup"
 
 const candidates = [
@@ -12,7 +13,7 @@ const candidates = [
     { candidate_id: 3, candidate_name: "Candidate C", party_name: "BJP" },
 ];
 
-export default function ElectionCard() {
+export default function ElectionResultCard() {
     const [election, setElection] = useState<any[]>([]);
 
     const fetchElectionData = async () => {
@@ -36,9 +37,9 @@ export default function ElectionCard() {
                 election && election.map(i => (
                     <div key={i.election_id} className="flex flex-col bg-gray-200 dark:bg-black rounded-3xl md:p-8 md:pb-10 p-5  w-[85%] min-h-fit md:w-[48%]  overflow-hidden my-8 border border-gray-300 dark:border-gray-600 relative drop-shadow-[0_5px_5px_rgba(255,255,255,0.25)]">
                         {i.current_status ?
-                            <span className="absolute top-0 left-0 p-2 px-4 text-sm  bg-green-600 rounded-br-3xl" >Live</span>
-                            :
                             <span className="absolute top-0 left-0 p-2 px-4 text-sm  bg-red-600 rounded-br-3xl" >End</span>
+                            :
+                            <span className="absolute top-0 left-0 p-2 px-4 text-sm  bg-green-600 rounded-br-3xl" >Live</span>
                         }
                         <h2 className="text-center text-xl md:text-3xl">{i.election_name}</h2>
                         {i.candidates && i.candidates.length > 1 &&
@@ -54,7 +55,7 @@ export default function ElectionCard() {
                                 <p>{i.end_date}</p> 
                             </div> */}
                             <div className=" flex items-center gap-4">
-                                <VotePopup candidates={i.candidates} electionID={i.election_id} isElectionLive={i.current_status} />
+                                <VoteResultPopup candidates={i.candidates} electionID={i.election_id} isElectionLive={i.current_status} />
                             </div>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ export async function GET() {
              FROM voter 
              WHERE username='${username}') 
         OR district_id IS NULL
-        AND election_id NOT IN 
+        AND election_id IN 
             (SELECT election_id 
              FROM voted 
              WHERE voter_id = 

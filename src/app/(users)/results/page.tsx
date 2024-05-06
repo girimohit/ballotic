@@ -1,6 +1,7 @@
 // components/EmailForm.tsx
 import { Metadata } from 'next';
 import { useState } from 'react';
+import ElectionResultCard from './resultCard';
 
 export const metadata: Metadata = {
     title: "Election Results",
@@ -11,12 +12,17 @@ export default async function ElectionResults() {
     return (
         <>
             <main className="w-full flex items-center min-h-screen flex-col pt-24">
-                <h1>Results</h1>
+                < ElectionResultCard />
             </main>
 
         </>
     )
 }
+
+
+
+
+
 
 // const EmailForm = () => {
 //     const [email, setEmail] = useState('');
