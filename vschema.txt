@@ -598,159 +598,202 @@ TODO
 
 
 
+CREATE TABLE IF NOT EXISTS districts (
+  district_id SERIAL PRIMARY KEY,
+  district_name VARCHAR(255) NOT NULL
+);
 
+CREATE TABLE IF NOT EXISTS wards (
+  ward_number INT NOT NULL PRIMARY KEY,
+  ward_name VARCHAR(255) NOT NULL,
+  district_id INT REFERENCES districts(district_id)
+);
 
-
-
-'CREATE TABLE IF NOT EXISTS `ballot_trial`.`districts` (
-  `district_id` INT NOT NULL AUTO_INCREMENT,
-  `district_name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`district_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 11
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci'
-
-
-
-
-CREATE TABLE IF NOT EXISTS `ballot_trial`.`parties` (
-  `party_id` INT NOT NULL AUTO_INCREMENT,
-  `party_name` VARCHAR(255) NOT NULL,
-  `party_leader` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`party_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 12
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-
-
-CREATE TABLE IF NOT EXISTS `ballot_trial`.`wards` (
-  `ward_number` INT NOT NULL,
-  `ward_name` VARCHAR(255) NOT NULL,
-  `district_id` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`ward_number`),
-  INDEX `district_id` (`district_id` ASC) VISIBLE,
-  CONSTRAINT `wards_ibfk_1`
-    FOREIGN KEY (`district_id`)
-    REFERENCES `ballot_trial`.`districts` (`district_id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-
-
-CREATE TABLE IF NOT EXISTS `ballot_trial`.`elections` (
-  `election_id` INT NOT NULL AUTO_INCREMENT,
-  `election_name` VARCHAR(255) NOT NULL,
-  `start_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  `end_date` DATE NOT NULL,
-  `ward_number` INT NULL DEFAULT NULL,
-  `district_id` INT NULL DEFAULT NULL,
-  `current_status` TINYINT(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`election_id`),
-  INDEX `district_id` (`district_id` ASC) VISIBLE,
-  CONSTRAINT `elections_ibfk_1`
-    FOREIGN KEY (`district_id`)
-    REFERENCES `ballot_trial`.`districts` (`district_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 26
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-
-
-
-CREATE TABLE IF NOT EXISTS `ballot_trial`.`voter` (
-  `voter_id` INT NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(255) NOT NULL,
-  `role` ENUM('admin', 'voter') NOT NULL,
-  `ward_number` INT NOT NULL,
-  `district_id` INT NOT NULL,
-  `dob` DATE NOT NULL DEFAULT '2000-01-01',
-  PRIMARY KEY (`voter_id`),
-  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
-  UNIQUE INDEX `voter_id_UNIQUE` (`voter_id` ASC) VISIBLE,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-  INDEX `fk_district` (`district_id` ASC) VISIBLE,
-  INDEX `voter_ibfk_1` (`ward_number` ASC) VISIBLE,
-  CONSTRAINT `fk_district`
-    FOREIGN KEY (`district_id`)
-    REFERENCES `ballot_trial`.`districts` (`district_id`),
-  CONSTRAINT `voter_ibfk_1`
-    FOREIGN KEY (`ward_number`)
-    REFERENCES `ballot_trial`.`wards` (`ward_number`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 26
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-
-
-CREATE TABLE IF NOT EXISTS `ballot_trial`.`candidates` (
-  `candidate_id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
-  `party_id` INT NULL DEFAULT NULL,
-  `election_id` INT NULL DEFAULT NULL,
-  `email` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`candidate_id`),
-  INDEX `party_id` (`party_id` ASC) VISIBLE,
-  INDEX `election_id` (`election_id` ASC) VISIBLE,
-  CONSTRAINT `candidates_ibfk_1`
-    FOREIGN KEY (`party_id`)
-    REFERENCES `ballot_trial`.`parties` (`party_id`),
-  CONSTRAINT `candidates_ibfk_2`
-    FOREIGN KEY (`election_id`)
-    REFERENCES `ballot_trial`.`elections` (`election_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 28
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-
-
-CREATE TABLE IF NOT EXISTS `ballot_trial`.`votes` (
-  `vote_id` INT NOT NULL AUTO_INCREMENT,
-  `voter_id` INT NULL DEFAULT NULL,
-  `candidate_id` INT NULL DEFAULT NULL,
-  `timestamp` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  `election_id` INT NOT NULL,
-  PRIMARY KEY (`vote_id`),
-  INDEX `voter_id` (`voter_id` ASC) VISIBLE,
-  INDEX `candidate_id` (`candidate_id` ASC) VISIBLE,
-  INDEX `election_id` (`election_id` ASC) VISIBLE,
-  CONSTRAINT `votes_ibfk_1`
-    FOREIGN KEY (`voter_id`)
-    REFERENCES `ballot_trial`.`voter` (`voter_id`),
-  CONSTRAINT `votes_ibfk_2`
-    FOREIGN KEY (`candidate_id`)
-    REFERENCES `ballot_trial`.`candidates` (`candidate_id`),
-  CONSTRAINT `votes_ibfk_3`
-    FOREIGN KEY (`election_id`)
-    REFERENCES `ballot_trial`.`elections` (`election_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 11
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
-
-
-CREATE TABLE otps (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    otp VARCHAR(6) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS parties (
+  party_id SERIAL PRIMARY KEY,
+  party_name VARCHAR(255) NOT NULL,
+  party_leader VARCHAR(255) NOT NULL
 );
 
 
-ALTER TABLE ballotic.otps 
-ADD CONSTRAINT fkotp
-FOREIGN KEY (user_id)    
-REFERENCES ballotic.voter(voter_id);
+CREATE TABLE IF NOT EXISTS elections (
+  election_id SERIAL PRIMARY KEY,
+  election_name VARCHAR(255) NOT NULL,
+  start_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  end_date DATE NOT NULL,
+  ward_number INT REFERENCES wards(ward_number),
+  district_id INT REFERENCES districts(district_id),
+  current_status BOOLEAN NOT NULL DEFAULT TRUE
+);
 
 
 
-create table voted(id int primary key auto_increment, 
-voter_id int, 
-election_id int, 
-foreign key(election_id) references elections(election_id), 
-foreign key(voter_id) references voter(voter_id));
+CREATE TABLE IF NOT EXISTS candidates (
+  candidate_id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  party_id INT REFERENCES parties(party_id),
+  election_id INT REFERENCES elections(election_id),
+  email VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS voter (
+  voter_id SERIAL PRIMARY KEY,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  role VARCHAR(10) NOT NULL CHECK (role IN ('admin', 'voter')),
+  ward_number INT NOT NULL REFERENCES wards(ward_number),
+  district_id INT NOT NULL REFERENCES districts(district_id),
+  dob DATE NOT NULL DEFAULT '2000-01-01'
+);
+
+CREATE TABLE IF NOT EXISTS votes (
+  vote_id SERIAL PRIMARY KEY,
+  candidate_id INT REFERENCES candidates(candidate_id),
+  timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  election_id INT NOT NULL REFERENCES elections(election_id)
+);
+
+CREATE TABLE IF NOT EXISTS otps (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES voter(voter_id),
+  otp VARCHAR(6) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS voted (
+  id SERIAL PRIMARY KEY,
+  voter_id INT REFERENCES voter(voter_id),
+  election_id INT REFERENCES elections(election_id)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+-- Sample data for districts table
+INSERT INTO districts (district_name) VALUES
+('Mumbai'),
+('Delhi'),
+('Kolkata'),
+('Chennai'),
+('Bangalore'),
+('Hyderabad'),
+('Pune'),
+('Ahmedabad'),
+('Jaipur'),
+('Lucknow');
+
+-- Sample data for wards table
+INSERT INTO wards (ward_number, ward_name, district_id) VALUES
+(1, 'Colaba', 1),
+(2, 'Dadar', 1),
+(3, 'Malad', 1),
+(4, 'Vasant Kunj', 2),
+(5, 'Karol Bagh', 2),
+(6, 'Saket', 2),
+(7, 'Salt Lake', 3),
+(8, 'Park Street', 3),
+(9, 'Howrah', 3),
+(10, 'Behala', 3);
+
+-- Sample data for parties table
+INSERT INTO parties (party_name, party_leader) VALUES
+('Indian National Congress', 'Rahul Gandhi'),
+('Bharatiya Janata Party', 'Narendra Modi'),
+('Aam Aadmi Party', 'Arvind Kejriwal'),
+('Shiv Sena', 'Uddhav Thackeray'),
+('Trinamool Congress', 'Mamata Banerjee'),
+('All India Anna Dravida Munnetra Kazhagam', 'M. K. Stalin'),
+('Telugu Desam Party', 'N. Chandrababu Naidu'),
+('Bahujan Samaj Party', 'Mayawati'),
+('Samajwadi Party', 'Akhilesh Yadav'),
+('Communist Party of India (Marxist)', 'Sitaram Yechury');
+
+-- Sample data for elections table
+INSERT INTO elections (election_name, start_date, end_date, ward_number, district_id, current_status) VALUES
+('Local Body Elections Mumbai 2024', '2024-04-01', '2024-04-30', NULL, 1, TRUE),
+('Delhi Assembly Elections 2025', '2025-02-01', '2025-02-28', NULL, 2, TRUE),
+('Kolkata Municipal Elections 2024', '2024-03-01', '2024-03-31', NULL, 3, TRUE),
+('Chennai Corporation Elections 2024', '2024-05-01', '2024-05-31', NULL, 4, TRUE),
+('Bangalore City Corporation Elections 2025', '2025-06-01', '2025-06-30', NULL, 5, TRUE),
+('Hyderabad Municipal Elections 2024', '2024-07-01', '2024-07-31', NULL, 6, TRUE),
+('Pune Municipal Corporation Elections 2024', '2024-08-01', '2024-08-31', NULL, 7, TRUE),
+('Ahmedabad Municipal Corporation Elections 2025', '2025-09-01', '2025-09-30', NULL, 8, TRUE),
+('Jaipur Municipal Corporation Elections 2024', '2024-10-01', '2024-10-31', NULL, 9, TRUE),
+('Lucknow Municipal Corporation Elections 2025', '2025-11-01', '2025-11-30', NULL, 10, TRUE);
+
+
+-- Sample data for candidates table
+INSERT INTO candidates (name, party_id, election_id, email) VALUES
+('Siddharth Patil', 1, 1, 'siddharth.patil@example.com'),
+('Aarti Singh', 2, 1, 'aarti.singh@example.com'),
+('Vivek Reddy', 3, 1, 'vivek.reddy@example.com'),
+('Anjali Deshmukh', 4, 1, 'anjali.deshmukh@example.com'),
+('Rajesh Sharma', 5, 1, 'rajesh.sharma@example.com'),
+('Deepa Venkatesh', 6, 1, 'deepa.venkatesh@example.com'),
+('Neha Rao', 7, 1, 'neha.rao@example.com'),
+('Rohit Banerjee', 8, 1, 'rohit.banerjee@example.com'),
+('Arun Kumar', 9, 1, 'arun.kumar@example.com'),
+('Priya Gupta', 10, 1, 'priya.gupta@example.com');
+
+
+
+-- Sample data for voter table
+INSERT INTO voter (username, password, email, role, ward_number, district_id, dob) VALUES
+('john_doe', 'password123', 'john.doe@example.com', 'voter', 1, 1, '1990-03-15'),
+('jane_smith', 'abc@123', 'jane.smith@example.com', 'voter', 2, 1, '1985-07-20'),
+('ram_kumar', 'ram@123', 'ram.kumar@example.com', 'voter', 3, 1, '1988-09-10'),
+('sita_devi', 'sita123', 'sita.devi@example.com', 'voter', 4, 2, '1975-05-25'),
+('rahul_gupta', 'rahul@123', 'rahul.gupta@example.com', 'voter', 5, 2, '1980-11-05'),
+('meena_sharma', 'meena123', 'meena.sharma@example.com', 'voter', 6, 2, '1992-12-30'),
+('raj_patel', 'raj@123', 'raj.patel@example.com', 'voter', 7, 3, '1978-08-12'),
+('anita_verma', 'anita123', 'anita.verma@example.com', 'voter', 8, 3, '1983-04-18'),
+('mohan_singh', 'mohan@123', 'mohan.singh@example.com', 'voter', 9, 3, '1987-01-22'),
+('priya_shah', 'priya123', 'priya.shah@example.com', 'voter', 10, 4, '1982-06-08');
+
+-- Sample data for votes table
+INSERT INTO votes (candidate_id, election_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10);
+
+-- Sample data for otps table
+INSERT INTO otps (user_id, otp) VALUES
+(1, '123456'),
+(2, '654321'),
+(3, '987654'),
+(4, '456789'),
+(5, '321654'),
+(6, '654987'),
+(7, '789123'),
+(8, '456123'),
+(9, '789456'),
+(10, '321789');
+
+-- Sample data for voted table
+INSERT INTO voted (voter_id, election_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10);

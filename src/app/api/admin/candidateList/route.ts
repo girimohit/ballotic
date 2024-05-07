@@ -1,57 +1,67 @@
 import { query } from "@/database/db";
 import { NextRequest, NextResponse } from "next/server";
+import { sql } from "@vercel/postgres";
 
-// GEt all candidates
+// Get all candidates
 export async function GET() {
-  const candidateList = await query({
-    // query: "SELECT v.*, d.district_name FROM voter AS v JOIN districts AS d ON v.district_id = d.district_id;",
-    query:
-      "SELECT c.*, p.party_name, e.election_name " +
-      "FROM candidates AS c " +
-      "JOIN parties AS p ON p.party_id = c.party_id " +
-      "JOIN elections AS e ON e.election_id = c.election_id",
-    // values: [],
-  });
-  return NextResponse.json({
-    candidateList,
-  });
+  try {
+    const candidateListResult = await sql`
+      SELECT c.*, p.party_name, e.election_name 
+      FROM candidates AS c 
+      JOIN parties AS p ON p.party_id = c.party_id 
+      JOIN elections AS e ON e.election_id = c.election_id
+    `;
+
+    const candidateList = candidateListResult.rows;
+
+    return NextResponse.json({ candidateList }, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
 // Update Candidate
 export async function PUT(request: NextRequest) {
-  const { candidate_id, name, email } = await request.json();
-  const updateVoter = await query({
-    query:
-      `UPDATE candidates ` +
-      `SET name='${name}', email ='${email}' ` +
-      `WHERE candidate_id = '${candidate_id}'`,
-  });
-  return NextResponse.json({
-    updateVoter,
-  });
+  try {
+    const { candidate_id, name, email } = await request.json();
+
+    const updateCandidateResult = await sql`
+      UPDATE candidates 
+      SET name = ${name}, email = ${email} 
+      WHERE candidate_id = ${candidate_id}
+    `;
+
+    return NextResponse.json({ updateCandidateResult });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
-// Delete candidate
+// Delete Candidate
 export async function DELETE(request: NextRequest) {
-  const { candidate_id } = await request.json();
-  const response = await query({
-    query: `DELETE FROM candidates WHERE candidate_id = ${candidate_id}`,
-  });
-  return NextResponse.json({
-    response,
-  });
+  try {
+    const { candidate_id } = await request.json();
+
+    const deleteResult = await sql`DELETE FROM candidates WHERE candidate_id = $1`;
+
+    return NextResponse.json({ deleteResult });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
-export async function POST(request: Request) {
+// Create Candidate
+export async function POST(request: NextRequest) {
   try {
     const { candidate_name, party_id, election_id, candidate_email } = await request.json();
-    console.log(candidate_name, party_id, election_id, candidate_email);
-    const response = await query({
-      query: `INSERT INTO candidates (name, party_id, election_id, email) VALUES ('${candidate_name}', ${party_id}, ${election_id}, '${candidate_email}')`,
-    });
+
+    const insertResult = await sql`
+      INSERT INTO candidates (name, party_id, election_id, email) 
+      VALUES ($1, $2, $3, $4)
+    `;
+
     return NextResponse.redirect("/");
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
-  return NextResponse.json({ message: "Success" });
 }

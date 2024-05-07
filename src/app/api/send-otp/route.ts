@@ -1,23 +1,31 @@
-// pages/api/send-otp.ts
-
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { query } from "@/database/db";
+import { sql } from "@vercel/postgres";
 import otpGenerator from "otp-generator";
 import NodemailerTransporter from "./emailTransporter";
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  const { email, username } = await req.json();
-  console.log("Thie is the email : ");
-  console.log(email);
-  console.log(username);
-  const userId = await query({
-    query: `select voter_id from voter where username="${username}"`,
-  });
-  NodemailerTransporter(email, userId[0].voter_id);
-  // Generate OTP
-  // const otp = otpGenerator.generate(6, { digits: true, specialChars: false, upperCaseAlphabets: false });
+  try {
+    const { email, username } = await req.json();
+    console.log("This is the email: ", email);
+    console.log("This is the username: ", username);
 
-  return NextResponse.json(`Message sent to : ${email}`);
+    // Fetch voter_id for the given username
+    const userIdResult = await sql`SELECT voter_id FROM voter WHERE username = ${username}`;
+    const userId = userIdResult.rows[0]?.voter_id;
+
+    // Check if voter_id exists
+    if (!userId) {
+      return NextResponse.json("User not found", { status: 404 });
+    }
+
+    // Send email with OTP
+    await NodemailerTransporter(email, userId);
+
+    return NextResponse.json(`Message sent to: ${email}`, { status: 200 });
+  } catch (error: any) {
+    console.error("Error sending OTP:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }

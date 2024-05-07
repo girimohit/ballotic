@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import otpGenerator from "otp-generator";
 import { query } from "@/database/db";
+import { sql } from "@vercel/postgres";
 
 export default async function NodemailerTransporter(email: string, id: number) {
   const otp = otpGenerator.generate(6, {
@@ -27,9 +28,7 @@ export default async function NodemailerTransporter(email: string, id: number) {
     subject: "OTP Verification",
     text: `Your OTP for verification is: ${otp}`,
   };
-  const response = await query({
-    query: `insert into ballotic.otps(user_id, otp) values (${id}, "${otp}");`,
-  });
+  const response = await sql`insert into ballotic.otps(user_id, otp) values (${id}, "${otp}");`;
   // Send email
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
@@ -40,5 +39,4 @@ export default async function NodemailerTransporter(email: string, id: number) {
       return NextResponse.json({ msg: "OTP sent successfully" });
     }
   });
-
 }

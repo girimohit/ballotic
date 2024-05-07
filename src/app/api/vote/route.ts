@@ -1,27 +1,31 @@
 import { query } from "@/database/db";
 import { NextRequest, NextResponse } from "next/server";
+import { sql } from "@vercel/postgres";
 
 export async function POST(request: NextRequest) {
-  //   const voterRes = await fetch("http://localhost:3000/api/loggedinUser");
-  // const voterRes = await fetch("http://localhost:3000/api/elections");
-  // const voterData = voterRes.json();
-  // //   const voterID = voterData.loggedInUser[0].voter_id;
-  // console.log("Voter data : ");
-  // console.log(voterData);
+  try {
+    const { candidate_id, election_id, voter_id } = await request.json();
 
-  const { candidate_id, election_id, voter_id } = await request.json();
-  console.log({ candidate_id, election_id, voter_id });
+    // Insert vote into the votes table
+    const voteResult = await sql`
+      INSERT INTO votes (candidate_id, election_id) 
+      VALUES (${candidate_id}, ${election_id})
+      RETURNING *`;
 
-  console.log(
-    `INSERT INTO votes (voter_id, candidate_id, election_id) VALUES (${voter_id}, ${candidate_id}, ${election_id})`
-  );
-  const response = await query({
-    // query: `SELECT * FROM elections WHERE election_id=${election_id}`,
-    query: `INSERT INTO votes (candidate_id, election_id) VALUES (${candidate_id}, ${election_id})`,
-    // query: `SELECT * FROM votes WHERE election_id=${election_id}`,
-  });
-  const votedResponse = await query({
-    query: `INSERT INTO voted (voter_id, election_id) VALUES (${voter_id}, ${election_id})`,
-  });
-  return NextResponse.json(response);
+    // Insert voter's vote into the voted table
+    const votedResult = await sql`
+      INSERT INTO voted (voter_id, election_id) 
+      VALUES (${voter_id}, ${election_id})
+      RETURNING *`;
+
+    return NextResponse.json(
+      {
+        voteResult: voteResult.rows,
+        votedResult: votedResult.rows,
+      },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }

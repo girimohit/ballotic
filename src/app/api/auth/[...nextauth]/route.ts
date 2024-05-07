@@ -6,6 +6,7 @@ import { JWT } from "next-auth/jwt";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import NodemailerTransporter from "../../send-otp/emailTransporter";
+import { sql } from "@vercel/postgres";
 
 // import NextAuth from "next-auth/next";
 // import { authOptions } from "./options";
@@ -42,26 +43,22 @@ const handler = NextAuth({
       },
       async authorize(credentials, req) {
         // NodemailerTransporter(credentials?.email || "");
-        const response = await query({
-          query: `SELECT * FROM voter WHERE username="${credentials?.name}"`,
-          values: [],
-        });
-        const checkOTP = await query({
-          query: `SELECT o.otp
+        const response = await sql`SELECT * FROM voter WHERE username=${credentials?.name}`;
+        const checkOTP = await sql`SELECT o.otp
           FROM ballotic.otps AS o
           JOIN ballotic.voter AS v ON o.user_id = v.voter_id
           WHERE v.username = '${credentials?.name}'
           ORDER BY o.created_at DESC
-          LIMIT 1`,
-        });
-        const user = response[0];
+          LIMIT 1`;
+
+        const user = response.rows[0];
         // console.log(response);
         const providedPassword = credentials?.password?.toString().trim() || "";
         const storedPassword = user.password.toString().trim();
         // const isPasswordCorrect = await compare(providedPassword, password);
         const isPasswordCorrect = providedPassword === storedPassword;
-        const isOTPCorrect = credentials?.otp?.toString().trim() === checkOTP[0].otp;
-        console.log(checkOTP[0].otp);
+        const isOTPCorrect = credentials?.otp?.toString().trim() === checkOTP.rows[0].otp;
+        console.log(checkOTP.rows[0].otp);
         console.log(isPasswordCorrect);
         console.log(isOTPCorrect);
         if (isPasswordCorrect && isOTPCorrect) {

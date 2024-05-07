@@ -6,8 +6,7 @@
 //   }
 // }
 
-
-const voters = [
+const votersss = [
   {
     voter_id: 8,
     username: "kane_smith",
@@ -162,12 +161,16 @@ const voters = [
 
 import { query } from "@/database/db";
 import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { sql } from "@vercel/postgres";
 
-export async function GET() {
-  // const voters = await query({
-  //   query: "SELECT * FROM voter",
-  //   values: [],
-  // });
+export async function GET(request: NextRequest) {
+  try {
+    const votersResult = await sql`SELECT * FROM voter`;
+    const voters = votersResult.rows;
 
-  return NextResponse.json({ voters });
+    return NextResponse.json({ voters });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }

@@ -1,11 +1,6 @@
 import { NodeNextResponse } from "next/dist/server/base-http/node";
 import { NextRequest, NextResponse } from "next/server";
-
-// export async function GET() {
-//   return NextResponse.json({
-//     project: "DBMS By Hema Ma'am",
-//   });
-// }
+import { sql } from "@vercel/postgres";
 
 export async function POST(request: Request) {
   const data = await request.json();
@@ -13,8 +8,6 @@ export async function POST(request: Request) {
     data,
   });
 }
-
-import { sql } from "@vercel/postgres";
 
 export async function GET(request: NextRequest) {
   try {
