@@ -8,23 +8,23 @@ export async function GET() {
     const username = session?.user?.name;
 
     const elections = await sql`
-      SELECT * 
-      FROM elections 
-      WHERE 
-        ((district_id) IN 
-           (SELECT district_id 
-            FROM voter 
-            where username = ${username}) 
-        OR district_id IS NULL)
-        AND election_id NOT IN 
-          (SELECT election_id 
-          FROM voted 
-          WHERE voter_id = 
-            (SELECT voter_id 
-             FROM voter 
-             WHERE username = ${username}))
-        AND current_status = 1
-        AND end_date > current_date()`;
+    SELECT * 
+    FROM elections 
+    WHERE 
+      ((district_id) IN 
+         (SELECT district_id 
+          FROM voter 
+          where username = 'mohit') 
+      OR district_id IS NULL)
+      AND election_id NOT IN 
+        (SELECT election_id 
+        FROM voted 
+        WHERE voter_id = 
+          (SELECT voter_id 
+           FROM voter 
+           WHERE username = 'mohit'))
+      AND current_status = true`;
+    // AND end_date > current_date1`;
 
     // Fetch the candidates list for each election individually
     for (let i = 0; i < elections.rows.length; i++) {

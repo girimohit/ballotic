@@ -26,6 +26,16 @@ export default function LoginForm() {
         });
         setEmail(lowercaseData['email']);
         setUsername(lowercaseData['username']);
+
+
+        const name = lowercaseData['username'];
+        const password = lowercaseData['pass'];
+        const email = lowercaseData['email'];
+        const otp = lowercaseData['otp'];
+
+        console.log("sign in credentials ")
+        console.log(name, password, email, otp)
+
         const response = await signIn('credentials', {
             name: lowercaseData['username'],
             password: lowercaseData['pass'],
@@ -67,8 +77,6 @@ export default function LoginForm() {
 
     return (
         <>
-            {username}
-            {email}
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center mt-16 p-11 dark:border border dark:border-white border-black rounded-2xl">
                 <h1>Login Form</h1>
                 <input onChange={(e) => setUsername(e.target.value.trim())} type="text" name="username" required placeholder="Username" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
@@ -77,7 +85,7 @@ export default function LoginForm() {
 
                 {/* OTP input */}
                 {otpSent &&
-                    <input type="number" name="otp" required placeholder="Username" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
+                    <input type="number" name="otp" required placeholder="OTP" className="bg-transparent border-b border-gray-300 focus:border-none p-2" />
                 }
 
                 {/* OTP button */}

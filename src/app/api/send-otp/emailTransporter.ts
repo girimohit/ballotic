@@ -28,7 +28,10 @@ export default async function NodemailerTransporter(email: string, id: number) {
     subject: "OTP Verification",
     text: `Your OTP for verification is: ${otp}`,
   };
-  const response = await sql`insert into ballotic.otps(user_id, otp) values (${id}, "${otp}");`;
+  console.log("nodemailer: ");
+  console.log(id);
+  console.log(otp);
+  await sql`insert into otps(user_id, otp) values (${id}, ${otp});`;
   // Send email
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {

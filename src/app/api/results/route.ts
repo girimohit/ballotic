@@ -9,13 +9,13 @@ export async function GET() {
 
   const elections = await sql`SELECT * 
     FROM elections 
-    WHERE election_id IN 
+    WHERE election_id not IN 
       (SELECT election_id 
       FROM voted 
       WHERE voter_id = 
         (SELECT voter_id 
         FROM voter 
-        WHERE username='${username}'))`;
+        WHERE username=${username}))`;
 
   // Fetch the candidates list for each election individually
   for (let i = 0; i < elections.rows.length; i++) {

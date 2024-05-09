@@ -14,7 +14,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     // Fetch voter_id for the given username
     const userIdResult = await sql`SELECT voter_id FROM voter WHERE username = ${username}`;
     const userId = userIdResult.rows[0]?.voter_id;
-
+    console.log("User Id: ", userId);
     // Check if voter_id exists
     if (!userId) {
       return NextResponse.json("User not found", { status: 404 });

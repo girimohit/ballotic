@@ -1,11 +1,6 @@
 import NextAuth, { Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { query } from "@/database/db";
-import bcrypt, { compare, compareSync } from "bcrypt";
 import { JWT } from "next-auth/jwt";
-import jwt from "jsonwebtoken";
-import bcryptjs from "bcryptjs";
-import NodemailerTransporter from "../../send-otp/emailTransporter";
 import { sql } from "@vercel/postgres";
 
 // import NextAuth from "next-auth/next";
@@ -43,13 +38,24 @@ const handler = NextAuth({
       },
       async authorize(credentials, req) {
         // NodemailerTransporter(credentials?.email || "");
+        console.log("Auth credentials : " + credentials);
+        console.log(credentials?.name);
+        console.log(credentials?.password);
+        console.log(credentials?.email);
+        console.log(credentials?.otp);
         const response = await sql`SELECT * FROM voter WHERE username=${credentials?.name}`;
+        console.log("name : " + response);
+        console.log("name : " + response.rows);
+        console.log({ response: response.rows });
         const checkOTP = await sql`SELECT o.otp
-          FROM ballotic.otps AS o
-          JOIN ballotic.voter AS v ON o.user_id = v.voter_id
+          FROM otps AS o
+          JOIN voter AS v ON o.user_id = v.voter_id
           WHERE v.username = '${credentials?.name}'
           ORDER BY o.created_at DESC
           LIMIT 1`;
+
+        console.log("chceckotp : " + checkOTP);
+        console.log({ otp: checkOTP });
 
         const user = response.rows[0];
         // console.log(response);
