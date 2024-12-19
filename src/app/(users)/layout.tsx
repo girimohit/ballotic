@@ -6,7 +6,8 @@ import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionWrapper from "@/components/SessionWrapper";
 import SmoothScrolling from "@/components/parallax";
-
+import { Toaster } from "@/components/ui/toaster"
+import UserFooter from "@/components/footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -27,6 +28,8 @@ export default async function RootLayout({
             <SmoothScrolling>
               <Navbar />
               {children}
+              <UserFooter />
+              <Toaster />
             </SmoothScrolling>
           </ThemeProvider>
         </body>

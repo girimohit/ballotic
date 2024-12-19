@@ -9,7 +9,6 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { FormEvent } from "react"
 
 interface User {
@@ -39,6 +38,9 @@ export default function UpdateDialog({ user }: { user: User }) {
                 email: lowercaseData['email'],
             }),
         });
+        if (response.status === 200) {
+            window.location.reload();
+        }
     }
 
 

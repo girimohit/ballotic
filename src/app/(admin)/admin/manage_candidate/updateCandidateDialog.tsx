@@ -38,6 +38,9 @@ export default function UpdateCandidateDialog({ user }: { user: Candidate }) {
                 email: lowercaseData['email'],
             }),
         });
+        if (response.status === 200) {
+            window.location.reload();
+        }
     }
 
 
