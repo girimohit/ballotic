@@ -4,17 +4,22 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const session = await getServerSession();
-  // const session = await getSession();
-  // const { data: sessions, status } = useSession();
-  // console.log("SEssionssssssssssssssssssssssssss : ");
-  // console.log(session?.user?.name);
   const username = session?.user?.name;
 
-  const elections = await query({
-    query:
-      "SELECT * FROM elections WHERE (district_id) IN (SELECT district_id FROM voter WHERE username=?) OR district_id IS NULL",
-    values: [username],
-  });
+  let elections;
+  if (username) {
+    elections = await query({
+      query:
+        "SELECT * FROM elections WHERE (district_id) IN (SELECT district_id FROM voter WHERE username=?) OR district_id IS NULL",
+      values: [username],
+    });
+  } else {
+    // Guest/Anonymous user - select all elections to view
+    elections = await query({
+      query: "SELECT * FROM elections",
+      values: [],
+    });
+  }
 
   // Fetch the candidates list for each election individually
   for (let i = 0; i < elections.length; i++) {

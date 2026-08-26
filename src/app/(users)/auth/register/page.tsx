@@ -10,22 +10,13 @@ export const metadata: Metadata = {
 
 const RegisterVoter = async () => {
     const session = await getServerSession();
-    // While logged in, if we try to access the 'auth/register' pages, it will redirect to '/'
     if (session) {
-        redirect('/faqs');
+        redirect('/');
     }
     return (
-        <>
-            <main className="w-full flex items-center min-h-screen flex-col pt-16">
-                <RegisterVoterForm />
-            </main>
-        </>
+        <main className="w-full flex items-center justify-center min-h-screen flex-col pt-24 px-4 z-10 relative">
+            <RegisterVoterForm />
+        </main>
     )
 }
 export default RegisterVoter
-
-
-
-
-
-

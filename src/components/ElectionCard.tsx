@@ -1,25 +1,27 @@
-"use client";
-
 import { useState, useEffect } from "react";
-import { Vote, Trophy, Calendar, MapPin, ShieldAlert } from "lucide-react";
-import AvatarComponent from "./avatar";
-import VotePopup from "./votePopup";
+import Image from "next/image"
+import AvatarComponent from "./avatar"
+import VotePopup from "./votePopup"
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { ShieldAlert, MapPin, Calendar } from "lucide-react";
 
 export default function ElectionCard() {
   const [elections, setElections] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { data: session } = useSession();
 
   const fetchElectionData = async () => {
     try {
-      const response = await fetch("/api/elections");
-      const data = await response.json();
-      setElections(data.elections || []);
+      const electionResponse = await fetch('/api/elections')
+      const data = await electionResponse.json();
+      setElections(data.elections || [])
     } catch (error) {
-      console.error("Error fetching election data:", error);
+      console.log("Error fetching election data")
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchElectionData();
@@ -124,11 +126,20 @@ export default function ElectionCard() {
 
           {/* Action Row */}
           <div className="flex items-center justify-end border-t border-border/20 pt-4 mt-2 gap-4">
-            <VotePopup 
-              candidates={i.candidates || []} 
-              electionID={i.election_id} 
-              isElectionLive={!!i.current_status} 
-            />
+            {session ? (
+              <VotePopup 
+                candidates={i.candidates || []} 
+                electionID={i.election_id} 
+                isElectionLive={!!i.current_status} 
+              />
+            ) : (
+              <Link 
+                href="/auth/login" 
+                className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-semibold p-2.5 px-6 rounded-xl transition duration-200 shadow-md shadow-primary/10"
+              >
+                Log in to Vote
+              </Link>
+            )}
           </div>
         </div>
       ))}

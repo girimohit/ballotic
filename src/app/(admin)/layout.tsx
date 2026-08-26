@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-// import "./globals.css";
 import "/src/app/globals.css"
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionWrapper from "@/components/SessionWrapper";
@@ -21,9 +20,9 @@ export default async function RootLayout({
 }>) {
   return (
     <SessionWrapper>
-      <html lang="en">
-        <body className={inter.className} >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <html lang="en" className="dark" style={{ colorScheme: 'dark' }}>
+        <body className={`${inter.className} dark bg-background text-foreground antialiased`} >
+          <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark" disableTransitionOnChange>
             <main className="flex dark:bg-black bg-gray-400 h-screen">
               <AdminNavbar />
               <ScrollArea className="w-full scroll-smooth rounded-2xl dark:bg-[#151516]  bg-white mt-16 pb-8"  >

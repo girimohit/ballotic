@@ -11,14 +11,11 @@ export const metadata: Metadata = {
 export default async function LoginVoter() {
     const session = await getServerSession();
     if (session) {
-        console.log("Login secssion redirected");
-        redirect('/') //redirect after signin, but won't work
+        redirect('/')
     }
     return (
-        <>
-            <main className="w-full flex items-center min-h-screen flex-col pt-24">
-                <LoginForm />
-            </main >
-        </>
+        <main className="w-full flex items-center justify-center min-h-screen flex-col pt-24 px-4 z-10 relative">
+            <LoginForm />
+        </main >
     )
 }

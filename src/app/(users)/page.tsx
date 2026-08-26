@@ -39,7 +39,7 @@ export default function Home() {
     <main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-green-950/20 via-background to-background pt-24 px-4 md:px-8 flex flex-col justify-between w-full">
       {/* Hero Section */}
       <div className="flex flex-col items-center text-center mt-12 mb-16 max-w-7xl mx-auto w-full">
-        <motion.div 
+        {/* <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -47,7 +47,7 @@ export default function Home() {
         >
           <Zap size={14} className="animate-pulse" />
           Hybrid Web3 Vote Auditing Enabled
-        </motion.div>
+        </motion.div> */}
 
         <motion.h1 
           initial={{ opacity: 0, y: 10 }}

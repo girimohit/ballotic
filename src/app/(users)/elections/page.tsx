@@ -8,19 +8,14 @@ export const metadata: Metadata = {
 
 export default function Election() {
     return (
-        <>
-            <main className="w-full flex items-center min-h-screen flex-col pt-24">
-                    <ElectionCard />
-                    {/* <ElectionCard />
-                    <ElectionCard />
-                    <ElectionCard />
-                    <ElectionCard />
-                    <ElectionCard />
-                    <ElectionCard />
-                    <ElectionCard />
-                    <ElectionCard />
-                    <ElectionCard /> */}
-            </main>
-        </>
+        <main className="w-full flex items-center min-h-screen flex-col pt-28 px-4 md:px-8 pb-12 z-10 relative">
+            <div className="text-center mb-8 max-w-xl">
+                <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">Active Elections</h1>
+                <p className="text-muted-foreground text-sm mt-3 leading-relaxed">
+                    Browse configured district and ward ballots. Secure voting credentials are required to authenticate and register your vote.
+                </p>
+            </div>
+            <ElectionCard />
+        </main>
     )
 }

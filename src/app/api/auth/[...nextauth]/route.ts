@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { voters } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { JWT } from "next-auth/jwt";
+import bcrypt from "bcryptjs";
 
 const handler = NextAuth({
   session: {
@@ -41,7 +42,7 @@ const handler = NextAuth({
           const providedPassword = credentials?.password?.toString().trim() || "";
           const userPassword = user.password.toString().trim();
 
-          const passwordCorrect = providedPassword === userPassword;
+          const passwordCorrect = await bcrypt.compare(providedPassword, userPassword);
           console.log({ passwordCorrect });
 
           if (passwordCorrect) {
@@ -81,7 +82,3 @@ const handler = NextAuth({
 });
 
 export { handler as GET, handler as POST };
-
-// const handler = NextAuth(authOptions)
-
-// export { handler as GET, handler as POST };

@@ -1,9 +1,26 @@
-import { db } from "../src/db";
-import { districts, wards, voters, parties, elections, candidates } from "../src/db/schema";
+import { loadEnvConfig } from "@next/env";
+loadEnvConfig(process.cwd());
+
+import bcrypt from "bcryptjs";
 
 async function main() {
   console.log("Seeding database...");
   
+  // Dynamically import db modules after environment variables are loaded
+  const { db } = await import("../src/db");
+  const { districts, wards, voters, parties, elections, candidates } = await import("../src/db/schema");
+
+  const hashedPassword = bcrypt.hashSync("baL@otic", 10);
+
+  // Wipe existing tables in dependency order
+  console.log("Cleaning up existing database records...");
+  await db.delete(candidates);
+  await db.delete(elections);
+  await db.delete(parties);
+  await db.delete(voters);
+  await db.delete(wards);
+  await db.delete(districts);
+
   // 1. Seed Districts
   const districtList = await db.insert(districts).values([
     { districtName: "New Delhi" },
@@ -29,10 +46,10 @@ async function main() {
 
   // 3. Seed Voters
   await db.insert(voters).values([
-    { username: "mohit", password: "baL@otic", email: "mohit@example.in", role: "admin", wardNumber: 101, districtId: delhiId },
-    { username: "aravind", password: "baL@otic", email: "aravind@example.in", role: "voter", wardNumber: 101, districtId: delhiId },
-    { username: "priya", password: "baL@otic", email: "priya@example.in", role: "voter", wardNumber: 201, districtId: mumbaiId },
-    { username: "rahul", password: "baL@otic", email: "rahul@example.in", role: "voter", wardNumber: 301, districtId: blrId },
+    { username: "mohit", password: hashedPassword, email: "mohit@example.in", role: "admin", wardNumber: 101, districtId: delhiId },
+    { username: "aravind", password: hashedPassword, email: "aravind@example.in", role: "voter", wardNumber: 101, districtId: delhiId },
+    { username: "priya", password: hashedPassword, email: "priya@example.in", role: "voter", wardNumber: 201, districtId: mumbaiId },
+    { username: "rahul", password: hashedPassword, email: "rahul@example.in", role: "voter", wardNumber: 301, districtId: blrId },
   ]);
   console.log("Voters seeded.");
 
