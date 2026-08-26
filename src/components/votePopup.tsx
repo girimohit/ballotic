@@ -26,13 +26,29 @@ export default function VotePopup({ candidates, electionID, isElectionLive }: { 
   const [winner, setWinner] = useState<string>('');
 
   const handleResult = async () => {
-    // const electionRes = await fetch(`api/elections/result/${electionID}`);
-    const electionRes = await fetch(`api/elections/result/${electionID}`);
-    const data = await electionRes.json();
-    const voteCountCandidate1 = data.electionRes[0].vote_count
-    const voteCountCandidate2 = data.electionRes[1].vote_count
-    const winnerName = voteCountCandidate1 > voteCountCandidate2 ? candidates[0].candidate_name : candidates[1].candidate_name;
-    setWinner(winnerName);
+    try {
+      const electionRes = await fetch("api/elections/result/" + electionID);
+      const data = await electionRes.json();
+      
+      if (!data.electionRes || data.electionRes.length === 0) {
+        setWinner("No votes cast yet");
+        return;
+      }
+      
+      const voteCountCandidate1 = data.electionRes[0]?.vote_count || 0;
+      const voteCountCandidate2 = data.electionRes[1]?.vote_count || 0;
+      
+      let winnerName = "Tie";
+      if (voteCountCandidate1 > voteCountCandidate2) {
+        winnerName = candidates[0]?.candidate_name || "Candidate 1";
+      } else if (voteCountCandidate2 > voteCountCandidate1) {
+        winnerName = candidates[1]?.candidate_name || "Candidate 2";
+      }
+      setWinner(winnerName);
+    } catch (err) {
+      console.error(err);
+      setWinner("Result pending");
+    }
   }
 
 
@@ -42,10 +58,17 @@ export default function VotePopup({ candidates, electionID, isElectionLive }: { 
   };
 
   const handleVote = async () => {
-    const voterRes = await fetch("api/loggedinUser");
-    const voterData = await voterRes.json();
-    const voterID = voterData.loggedInUser[0].voter_id;
     try {
+      const voterRes = await fetch("api/loggedinUser");
+      const voterData = await voterRes.json();
+      
+      if (!voterData.loggedInUser || voterData.loggedInUser.length === 0) {
+        alert("Authentication Error: Logged in voter profile not found.");
+        return;
+      }
+      
+      const voterID = voterData.loggedInUser[0].voter_id;
+      
       if (selectedCandidate !== null) {
         const response = await fetch("/api/vote", {
           method: "POST",
@@ -58,9 +81,19 @@ export default function VotePopup({ candidates, electionID, isElectionLive }: { 
             voter_id: voterID,
           }),
         });
-        console.log(response.json());
+        
+        const result = await response.json();
+        if (result.success) {
+          alert("Vote Cast Successfully!\n\nLedger Audit Receipt:\nNetwork: " + result.receipt.network + "\nBlock Number: " + result.receipt.blockNumber + "\nTx Hash: " + result.receipt.txHash + "\nBallot SHA-256: " + result.vote.hash);
+        } else {
+          alert("Voting Rejected: " + result.error);
+        }
+      } else {
+        alert("Please select a candidate first.");
       }
-    } catch (error) { }
+    } catch (error) {
+      alert("Error: Connection failure or unauthorized session.");
+    }
   };
 
   return (
@@ -82,12 +115,12 @@ export default function VotePopup({ candidates, electionID, isElectionLive }: { 
                     <br />
                     <input
                       type="radio"
-                      id={`radio-${i.candidate_id}`}
+                      id={"radio-" + i.candidate_id}
                       name="candidate"
                       value={i.candidate_id}
                       onChange={handleCandidateSelection}
                     />
-                    <label htmlFor={`radio-${i.candidate_id}`}> {i.candidate_name}</label>
+                    <label htmlFor={"radio-" + i.candidate_id}> {i.candidate_name}</label>
                   </div>
                 ))}
             </AlertDialogDescription>
@@ -107,7 +140,7 @@ export default function VotePopup({ candidates, electionID, isElectionLive }: { 
           <AlertDialogHeader>
             <AlertDialogTitle className="text-2xl">Winner</AlertDialogTitle>
             <AlertDialogDescription className="uppercase">
-              {`Winner : ${winner}`}
+              {"Winner : " + winner}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -118,4 +151,3 @@ export default function VotePopup({ candidates, electionID, isElectionLive }: { 
     </>
   );
 };
-

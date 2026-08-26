@@ -3,12 +3,43 @@
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
-import { User, KeyRound, Mail, Shield, MapPin, Layers, AlertCircle, Loader2 } from "lucide-react";
+import { FormEvent, useState, useEffect } from "react";
+import { User, KeyRound, Mail, MapPin, Layers, AlertCircle, Loader2 } from "lucide-react";
 
 export default function RegisterVoterForm() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    
+    // Dropdown options
+    const [districts, setDistricts] = useState<any[]>([]);
+    const [wards, setWards] = useState<any[]>([]);
+    const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+    const [filteredWards, setFilteredWards] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchLocationData = async () => {
+            try {
+                const res = await fetch('/api/districts-wards');
+                if (res.ok) {
+                    const data = await res.json();
+                    setDistricts(data.districts || []);
+                    setWards(data.wards || []);
+                }
+            } catch (err) {
+                console.error("Error loading location details:", err);
+            }
+        };
+        fetchLocationData();
+    }, []);
+
+    useEffect(() => {
+        if (selectedDistrict) {
+            const distId = parseInt(selectedDistrict);
+            setFilteredWards(wards.filter(w => w.districtId === distId));
+        } else {
+            setFilteredWards([]);
+        }
+    }, [selectedDistrict, wards]);
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -17,11 +48,16 @@ export default function RegisterVoterForm() {
 
         const formData = new FormData(e.currentTarget);
         const name = String(formData.get('name') || '').trim().toLowerCase();
-        const password = String(formData.get('pass') || ''); // DO NOT LOWERCASE PASSWORD
+        const password = String(formData.get('pass') || '');
         const email = String(formData.get('email') || '').trim().toLowerCase();
-        const role = String(formData.get('role') || 'voter').trim().toLowerCase();
         const ward_num = String(formData.get('ward_number') || '');
         const district_id = String(formData.get('district_id') || '');
+
+        if (!district_id || !ward_num) {
+            setError('Please select a valid district and ward.');
+            setLoading(false);
+            return;
+        }
 
         try {
             const response = await fetch('/api/auth/register', {
@@ -31,7 +67,7 @@ export default function RegisterVoterForm() {
                     name,
                     password,
                     email,
-                    role,
+                    role: 'voter',
                     ward_num,
                     district_id,
                 }),
@@ -106,39 +142,40 @@ export default function RegisterVoterForm() {
                     />
                 </div>
 
-                <div className="relative">
-                    <Shield className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-                    <input 
-                        type="text" 
-                        name="role" 
-                        placeholder="Role (e.g. voter, admin)" 
-                        defaultValue="voter"
-                        className="w-full bg-background/50 border border-border/60 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl py-3 pl-11 pr-4 text-sm outline-none transition duration-200 text-foreground placeholder:text-muted-foreground" 
-                        required 
-                    />
-                </div>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="relative">
-                        <Layers className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-                        <input 
-                            type="number" 
-                            name="ward_number" 
-                            placeholder="Ward Number" 
-                            className="w-full bg-background/50 border border-border/60 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl py-3 pl-11 pr-4 text-sm outline-none transition duration-200 text-foreground placeholder:text-muted-foreground" 
-                            required 
-                        />
+                        <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                        <select
+                            name="district_id"
+                            value={selectedDistrict}
+                            onChange={(e) => setSelectedDistrict(e.target.value)}
+                            className="w-full bg-background/50 border border-border/60 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl py-3 pl-11 pr-4 text-sm outline-none transition duration-200 text-foreground placeholder:text-muted-foreground appearance-none"
+                            required
+                        >
+                            <option value="" className="bg-background text-foreground">Select District</option>
+                            {districts.map((d) => (
+                                <option key={d.districtId} value={d.districtId} className="bg-background text-foreground">
+                                    {d.districtName}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="relative">
-                        <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-                        <input 
-                            type="number" 
-                            name="district_id" 
-                            placeholder="District ID" 
-                            className="w-full bg-background/50 border border-border/60 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl py-3 pl-11 pr-4 text-sm outline-none transition duration-200 text-foreground placeholder:text-muted-foreground" 
-                            required 
-                        />
+                        <Layers className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                        <select
+                            name="ward_number"
+                            disabled={!selectedDistrict}
+                            className="w-full bg-background/50 border border-border/60 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl py-3 pl-11 pr-4 text-sm outline-none transition duration-200 text-foreground placeholder:text-muted-foreground disabled:opacity-50 appearance-none"
+                            required
+                        >
+                            <option value="" className="bg-background text-foreground">Select Ward</option>
+                            {filteredWards.map((w) => (
+                                <option key={w.wardNumber} value={w.wardNumber} className="bg-background text-foreground">
+                                    {w.wardName} (No. {w.wardNumber})
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 
@@ -159,5 +196,5 @@ export default function RegisterVoterForm() {
                 </div>
             </form>
         </div>
-    )
+    );
 }

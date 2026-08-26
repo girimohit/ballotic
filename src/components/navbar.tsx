@@ -14,7 +14,7 @@ const Navbar = async () => {
                 {/* Left Side Navigation Pill */}
                 <div className="h-12 flex font-semibold text-sm items-center gap-6 px-6 border-border/40 border-[0.11px] rounded-full backdrop-blur-[20px] bg-background/20 glass-panel">
                     <Link href={"/"} className="flex items-center gap-2 hover:text-primary transition-all duration-200">
-                        <Vote size={18} className="text-primary" />
+                        <Vote size={20} className="text-primary" />
                         <span className="font-bold tracking-tight">Ballotic</span>
                     </Link>
                     <span className="text-border/40">|</span>

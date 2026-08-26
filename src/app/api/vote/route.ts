@@ -1,6 +1,6 @@
 import { db } from "@/db";
-import { votes } from "@/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { votes, candidates } from "@/db/schema";
+import { desc, eq, and } from "drizzle-orm";
 import { calculateVoteHash, anchorVoteOnChain } from "@/lib/web3";
 import { NextResponse } from "next/server";
 
@@ -10,7 +10,26 @@ export async function POST(request: Request) {
   try {
     const { candidate_id, election_id, voter_id } = await request.json();
 
-    // 1. Fetch the last vote to get the previous hash
+    // 1. Prevent double voting: Check if this voter has already voted in this election
+    const existingVote = await db.select()
+      .from(votes)
+      .innerJoin(candidates, eq(votes.candidateId, candidates.candidateId))
+      .where(
+        and(
+          eq(votes.voterId, voter_id),
+          eq(candidates.electionId, election_id)
+        )
+      )
+      .limit(1);
+
+    if (existingVote.length > 0) {
+      return NextResponse.json({ 
+        success: false, 
+        error: "You have already cast a ballot in this election." 
+      }, { status: 400 });
+    }
+
+    // 2. Fetch the last vote to get the previous hash
     const lastVotes = await db.select()
       .from(votes)
       .orderBy(desc(votes.voteId))
@@ -18,7 +37,7 @@ export async function POST(request: Request) {
 
     const previousHash = lastVotes.length > 0 ? (lastVotes[0].hash || GENESIS_HASH) : GENESIS_HASH;
     
-    // 2. Generate a timestamp and calculate the vote hash
+    // 3. Generate a timestamp and calculate the vote hash
     const timestampStr = new Date().toISOString();
     const hash = calculateVoteHash(
       voter_id,
@@ -28,7 +47,7 @@ export async function POST(request: Request) {
       previousHash
     );
 
-    // 3. Persist the vote in the Postgres ledger
+    // 4. Persist the vote in the Postgres ledger
     const newVote = await db.insert(votes).values({
       voterId: voter_id,
       candidateId: candidate_id,
@@ -36,7 +55,7 @@ export async function POST(request: Request) {
       previousHash: previousHash,
     }).returning();
 
-    // 4. Anchor the vote on-chain
+    // 5. Anchor the vote on-chain
     const web3Receipt = await anchorVoteOnChain(hash, election_id);
 
     return NextResponse.json({
