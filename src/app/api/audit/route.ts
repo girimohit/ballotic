@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { verifyLedgerChain } from "@/lib/web3";
 import { NextResponse } from "next/server";
 

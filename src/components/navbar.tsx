@@ -22,7 +22,7 @@ const Navbar = async () => {
                     <Link href={"/"} className="hover:text-primary transition-all duration-200">Home</Link>
                     <Link href={"/elections"} className="hover:text-primary transition-all duration-200">Elections</Link>
                     {isAdmin && (
-                        <Link href={"/admin/voters"} className="hover:text-primary transition-all duration-200">Admin</Link>
+                        <Link href={"/admin/"} className="hover:text-primary transition-all duration-200">Admin</Link>
                     )}
                 </div>
 
