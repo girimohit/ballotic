@@ -4,13 +4,12 @@ import "/src/app/globals.css"
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionWrapper from "@/components/SessionWrapper";
 import AdminNavbar from "@/components/admin/adminNav";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Admin",
-  description: "A robust platform to manage elections with admin features",
+  title: "Ballotic Admin Control Panel",
+  description: "Secure cryptographic election administration panel",
 };
 
 export default async function RootLayout({
@@ -21,14 +20,19 @@ export default async function RootLayout({
   return (
     <SessionWrapper>
       <html lang="en" className="dark" style={{ colorScheme: 'dark' }}>
-        <body className={`${inter.className} dark bg-background text-foreground antialiased`} >
+        <body className={`${inter.className} dark bg-[#030303] text-foreground antialiased`} >
           <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark" disableTransitionOnChange>
-            <main className="flex dark:bg-black bg-gray-400 h-screen">
+            <div className="flex h-screen w-screen overflow-hidden bg-[#030303]">
+              {/* Sidebar */}
               <AdminNavbar />
-              <ScrollArea className="w-full scroll-smooth rounded-2xl dark:bg-[#151516]  bg-white mt-16 pb-8"  >
-                {children}
-              </ScrollArea>
-            </main>
+              
+              {/* Main Content Area */}
+              <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#09090b] border-l border-border/40">
+                <main className="flex-1 overflow-y-auto overflow-x-hidden scroll-smooth">
+                  {children}
+                </main>
+              </div>
+            </div>
           </ThemeProvider>
         </body>
       </html>
