@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { db } from "@/db";
 import { districts, wards } from "@/db/schema";
 import { NextResponse } from "next/server";

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { db } from "@/db";
 import { elections as electionsTable, voters } from "@/db/schema";
 import { eq, or, isNull } from "drizzle-orm";
