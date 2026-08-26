@@ -1,18 +1,13 @@
 import NextAuth, { Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { query } from "@/database/db";
-import bcrypt, { compare, compareSync } from "bcrypt";
+import { db } from "@/db";
+import { voters } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { JWT } from "next-auth/jwt";
-import jwt from "jsonwebtoken";
-import bcryptjs from "bcryptjs";
-
-// import NextAuth from "next-auth/next";
-// import { authOptions } from "./options";
 
 const handler = NextAuth({
   session: {
-    strategy: "jwt", // Use database-backed sessions
-    // maxAge: 30 * 24 * 60 * 60,
+    strategy: "jwt",
     maxAge: 2 * 24 * 60 * 60,
   },
 
@@ -29,65 +24,57 @@ const handler = NextAuth({
       },
       async authorize(credentials, req) {
         console.log({ credentials });
-        console.log("Wrong password or username");
-        // alert("Wrong password or username");
-        // console.log(`SELECT * FROM voter WHERE name="${credentials?.name}" AND age=${credentials?.age}`);
-        const response = await query({
-          query: `SELECT * FROM voter WHERE username="${credentials?.name}"`,
-          values: [],
-        });
-        const user = response[0];
-        console.log("User Object : ");
-        console.log(user);
-        console.log(user.id);
-        const providedAge = credentials?.password?.toString().trim() || "";
-        const userAge = user.password.toString().trim();
+        if (!credentials?.name) return null;
 
-        // const ageCorrect = await compare(providedAge, userAge);
-        const ageCorrect = providedAge === userAge;
-        // const ageCorrect = compareSync(providedAge, userAge);
-        console.log({ ageCorrect });
+        try {
+          const results = await db.select().from(voters).where(eq(voters.username, credentials.name)).limit(1);
+          const user = results[0];
 
-        // if (credentials?.age.toString() === user.age.toString() && user) {
-        if (ageCorrect) {
-          return {
-            id: user.id,
-            name: user.username,
-            email: user.email,
-          };
+          if (!user) {
+            console.log("User not found");
+            return null;
+          }
+
+          console.log("User Object : ");
+          console.log(user);
+
+          const providedPassword = credentials?.password?.toString().trim() || "";
+          const userPassword = user.password.toString().trim();
+
+          const passwordCorrect = providedPassword === userPassword;
+          console.log({ passwordCorrect });
+
+          if (passwordCorrect) {
+            return {
+              id: user.voterId.toString(),
+              name: user.username,
+              email: user.email,
+            };
+          }
+          
+          console.log("Wrong password");
+          return null;
+        } catch (error) {
+          console.error("Authorize error:", error);
+          return null;
         }
-        console.log("NUlll returned");
-
-        return null;
       },
     }),
   ],
 
   callbacks: {
-    async jwt({ token, user, account, profile, isNewUser }): Promise<JWT> {
-      console.log(user);
-      token.guy = "abc";
-      if (user?.name) {
+    async jwt({ token, user }): Promise<JWT> {
+      if (user) {
         token.name = user.name;
-        token.age = user.name;
+        token.email = user.email;
       }
-      if (user?.email) {
-        token.age = user.email;
-      }
-      // console.log("USER");
-      // console.log(user);
-      // console.log("PRINTING TOKEN");
-      // console.log(token);
       return token;
     },
-    async session({ session, user, token }): Promise<Session> {
-      // async session(session: Session, token: JWT) {
-
-      console.log(user);
-      // session.user = token; // Assuming `user` is the key to store user data in the session
-      session.user = user;
-      // console.log("PRINTING SESSION ");
-      // console.log(session);
+    async session({ session, token }): Promise<Session> {
+      if (session.user) {
+        session.user.name = token.name;
+        session.user.email = token.email;
+      }
       return session;
     },
   },

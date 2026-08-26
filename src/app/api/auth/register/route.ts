@@ -1,16 +1,23 @@
-import { query } from "@/database/db";
+import { db } from "@/db";
+import { voters } from "@/db/schema";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
     const { name, password, email, role, ward_num, district_id } = await request.json();
-    const response = await query({
-      query: `INSERT INTO voter (username, password, email, role, ward_number, district_id) VALUES ('${name}', '${password}', '${email}', '${role}', ${ward_num}, ${district_id})`,
+    
+    await db.insert(voters).values({
+      username: name,
+      password: password,
+      email: email,
+      role: role || "voter",
+      wardNumber: ward_num ? parseInt(ward_num) : null,
+      districtId: district_id ? parseInt(district_id) : 3,
     });
-    return NextResponse.redirect("http://localhost:3000/auth/login");
-  } catch (error) {
-    console.log(error);
+    
+    return NextResponse.json({ message: "Success" });
+  } catch (error: any) {
+    console.error("Registration error:", error);
+    return NextResponse.json({ message: "Failed", error: error.message }, { status: 500 });
   }
-
-  return NextResponse.json({ message: "Success" });
 }
