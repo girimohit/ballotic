@@ -8,12 +8,13 @@ async function main() {
   
   // Dynamically import db modules after environment variables are loaded
   const { db } = await import("../src/db");
-  const { districts, wards, voters, parties, elections, candidates } = await import("../src/db/schema");
+  const { districts, wards, voters, parties, elections, candidates, votes } = await import("../src/db/schema");
 
   const hashedPassword = bcrypt.hashSync("baL@otic", 10);
 
   // Wipe existing tables in dependency order
   console.log("Cleaning up existing database records...");
+  await db.delete(votes); // Clear votes first to break foreign key references
   await db.delete(candidates);
   await db.delete(elections);
   await db.delete(parties);
@@ -65,26 +66,90 @@ async function main() {
   const incId = partyList[1].partyId;
   const aapId = partyList[2].partyId;
 
-  // 5. Seed Elections
+  // 5. Seed Elections (Include national global elections and district municipal elections)
   const electionList = await db.insert(elections).values([
-    { electionName: "Connaught Place Ward Election 2026", endDate: "2026-12-31", wardNumber: 101, districtId: delhiId, currentStatus: true },
-    { electionName: "Andheri West Local Election 2026", endDate: "2026-12-31", wardNumber: 201, districtId: mumbaiId, currentStatus: true },
+    { 
+      electionName: "Connaught Place Ward Election 2026", 
+      endDate: "2026-12-31", 
+      wardNumber: 101, 
+      districtId: delhiId, 
+      currentStatus: true 
+    },
+    { 
+      electionName: "Andheri West Local Election 2026", 
+      endDate: "2026-12-31", 
+      wardNumber: 201, 
+      districtId: mumbaiId, 
+      currentStatus: true 
+    },
+    { 
+      electionName: "Lok Sabha General Elections 2026", 
+      endDate: "2026-12-31", 
+      wardNumber: null, 
+      districtId: null, 
+      currentStatus: true 
+    },
+    { 
+      electionName: "Chanakyapuri Municipal Council Election 2026", 
+      endDate: "2026-12-31", 
+      wardNumber: 102, 
+      districtId: delhiId, 
+      currentStatus: true 
+    },
+    { 
+      electionName: "Indiranagar Ward Civic Body Election 2026", 
+      endDate: "2026-12-31", 
+      wardNumber: 301, 
+      districtId: blrId, 
+      currentStatus: true 
+    },
+    { 
+      electionName: "Bandra East Legislative Seat Election 2026", 
+      endDate: "2026-12-31", 
+      wardNumber: 202, 
+      districtId: mumbaiId, 
+      currentStatus: true 
+    }
   ]).returning();
   console.log("Elections seeded:", electionList);
 
-  const election1Id = electionList[0].electionId;
-  const election2Id = electionList[1].electionId;
+  const connaughtElectionId = electionList[0].electionId;
+  const andheriElectionId = electionList[1].electionId;
+  const lokSabhaElectionId = electionList[2].electionId;
+  const chanakyaElectionId = electionList[3].electionId;
+  const indiraElectionId = electionList[4].electionId;
+  const bandraElectionId = electionList[5].electionId;
 
   // 6. Seed Candidates
   await db.insert(candidates).values([
-    { name: "Rajesh Kumar", partyId: bjpId, electionId: election1Id, email: "rajesh@bjp.in" },
-    { name: "Sanjay Singh", partyId: aapId, electionId: election1Id, email: "sanjay@aap.in" },
-    { name: "Amit Patel", partyId: bjpId, electionId: election2Id, email: "amit@bjp.in" },
-    { name: "Sunita Deshmukh", partyId: incId, electionId: election2Id, email: "sunita@inc.in" },
+    // Candidates for Connaught Place Ward Election
+    { name: "Rajesh Kumar", partyId: bjpId, electionId: connaughtElectionId, email: "rajesh@bjp.in" },
+    { name: "Sanjay Singh", partyId: aapId, electionId: connaughtElectionId, email: "sanjay@aap.in" },
+    
+    // Candidates for Andheri West Local Election
+    { name: "Amit Patel", partyId: bjpId, electionId: andheriElectionId, email: "amit@bjp.in" },
+    { name: "Sunita Deshmukh", partyId: incId, electionId: andheriElectionId, email: "sunita@inc.in" },
+
+    // Candidates for Lok Sabha General Elections (National)
+    { name: "Narendra Modi", partyId: bjpId, electionId: lokSabhaElectionId, email: "modi@bjp.in" },
+    { name: "Rahul Gandhi", partyId: incId, electionId: lokSabhaElectionId, email: "rahul@inc.in" },
+    { name: "Arvind Kejriwal", partyId: aapId, electionId: lokSabhaElectionId, email: "kejriwal@aap.in" },
+
+    // Candidates for Chanakyapuri Municipal Council Election
+    { name: "Meenakshi Lekhi", partyId: bjpId, electionId: chanakyaElectionId, email: "meenakshi@bjp.in" },
+    { name: "Ajay Maken", partyId: incId, electionId: chanakyaElectionId, email: "maken@inc.in" },
+
+    // Candidates for Indiranagar Ward Civic Body Election
+    { name: "Tejasvi Surya", partyId: bjpId, electionId: indiraElectionId, email: "surya@bjp.in" },
+    { name: "Sowmya Reddy", partyId: incId, electionId: indiraElectionId, email: "sowmya@inc.in" },
+
+    // Candidates for Bandra East Legislative Seat Election
+    { name: "Ashish Shelar", partyId: bjpId, electionId: bandraElectionId, email: "shelar@bjp.in" },
+    { name: "Zeeshan Siddique", partyId: incId, electionId: bandraElectionId, email: "zeeshan@inc.in" }
   ]);
   console.log("Candidates seeded.");
 
-  console.log("Database seeded successfully!");
+  console.log("Database seeded successfully with expanded datasets!");
 }
 
 main().catch((err) => {

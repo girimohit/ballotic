@@ -9,6 +9,7 @@ import { User, KeyRound, Mail, MapPin, Layers, AlertCircle, Loader2 } from "luci
 export default function RegisterVoterForm() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [isAdminSignup, setIsAdminSignup] = useState(false);
     
     // Dropdown options
     const [districts, setDistricts] = useState<any[]>([]);
@@ -53,7 +54,7 @@ export default function RegisterVoterForm() {
         const ward_num = String(formData.get('ward_number') || '');
         const district_id = String(formData.get('district_id') || '');
 
-        if (!district_id || !ward_num) {
+        if (!isAdminSignup && (!district_id || !ward_num)) {
             setError('Please select a valid district and ward.');
             setLoading(false);
             return;
@@ -67,9 +68,9 @@ export default function RegisterVoterForm() {
                     name,
                     password,
                     email,
-                    role: 'voter',
-                    ward_num,
-                    district_id,
+                    role: isAdminSignup ? 'admin' : 'voter',
+                    ward_num: isAdminSignup ? (ward_num || null) : ward_num,
+                    district_id: isAdminSignup ? (district_id || null) : district_id,
                 }),
             });
 
@@ -150,7 +151,7 @@ export default function RegisterVoterForm() {
                             value={selectedDistrict}
                             onChange={(e) => setSelectedDistrict(e.target.value)}
                             className="w-full bg-background/50 border border-border/60 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl py-3 pl-11 pr-4 text-sm outline-none transition duration-200 text-foreground placeholder:text-muted-foreground appearance-none"
-                            required
+                            required={!isAdminSignup}
                         >
                             <option value="" className="bg-background text-foreground">Select District</option>
                             {districts.map((d) => (
@@ -167,7 +168,7 @@ export default function RegisterVoterForm() {
                             name="ward_number"
                             disabled={!selectedDistrict}
                             className="w-full bg-background/50 border border-border/60 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl py-3 pl-11 pr-4 text-sm outline-none transition duration-200 text-foreground placeholder:text-muted-foreground disabled:opacity-50 appearance-none"
-                            required
+                            required={!isAdminSignup}
                         >
                             <option value="" className="bg-background text-foreground">Select Ward</option>
                             {filteredWards.map((w) => (
@@ -179,7 +180,21 @@ export default function RegisterVoterForm() {
                     </div>
                 </div>
 
-                <Button type="submit" disabled={loading} className="w-full py-6 rounded-xl font-semibold mt-4 bg-primary text-primary-foreground hover:bg-primary/90">
+                {/* Demo Admin Signup Checkbox */}
+                <div className="flex items-center gap-2.5 px-1 py-2">
+                    <input 
+                        type="checkbox" 
+                        id="admin-signup"
+                        checked={isAdminSignup}
+                        onChange={(e) => setIsAdminSignup(e.target.checked)}
+                        className="h-4.5 w-4.5 rounded border-border/80 bg-background/50 text-primary focus:ring-primary accent-primary cursor-pointer"
+                    />
+                    <label htmlFor="admin-signup" className="text-sm font-semibold text-muted-foreground select-none cursor-pointer hover:text-foreground/80 transition duration-150">
+                        Register as Administrator (Demo / Testing)
+                    </label>
+                </div>
+
+                <Button type="submit" disabled={loading} className="w-full py-6 rounded-xl font-semibold mt-2 bg-primary text-primary-foreground hover:bg-primary/90">
                     {loading ? (
                         <>
                             <Loader2 className="animate-spin mr-2" size={18} />

@@ -1,12 +1,13 @@
 import Link from "next/link"
 import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/authOptions"
 import Logout from "@/app/(users)/logout";
 import { Vote } from "lucide-react";
 
 const Navbar = async () => {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     const username = session?.user?.name || "user";
-    const isAdmin = (session?.user as any)?.role === "admin";
+    const isAdmin = session?.user?.role === "admin";
 
     return (
         <div className="w-full fixed top-0 left-0 right-0 z-30 flex justify-center mt-4 px-4 md:px-8">
